@@ -47,4 +47,7 @@
 				"password": "27dd19ac."
 			}
 		],
-		"
+		"jupyter.generateSVGPlots": true,
+		"pythonIndent.trimLinesWithOnlyWhitespace": true
+	}
+}
