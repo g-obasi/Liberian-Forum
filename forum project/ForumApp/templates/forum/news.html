@@ -1,0 +1,49 @@
+{% extends 'forum/base.html' %}
+{% load forum_tags %}
+{% load static %}
+
+{% block content %}
+
+<a name="top">
+</a><h2>Bulletin News</h2><p><a href="{% url 'home' %}">Liberian Forum</a> / <a href="{% url 'news' %}"> News &amp; Discussions</a></p>
+
+<p></p>
+
+<p> 
+
+</a>
+
+</p>
+
+<table summary="links"><tbody><tr><td>
+    {% for news in featured_news %}
+    
+    <a href="{% url 'thread_post_list' topic.id  %}"><b>{{news.title}}</b></a> at <b>{{ news.date_created|date:"h:i a"}}</b> On <b>{{news.date_created|date:"jS b"}}</b>
+    {% endfor %}
+
+    </td></tr></tbody></table>
+<p>
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+        <a href="?page={{page_obj.previous_page_number}}">Prev</a>
+        {% endif %}
+        
+        {% proper_elided_page_range paginator page_obj.number as page_range %}
+        
+        {% for i in page_range %}
+            {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page_obj.number}}</b></li>
+            {% elif i == paginator.ELLIPSIS %} <li style="display:inline" class="active page_item"><span
+                    class="">{{paginator.ELLIPSIS}}</span></li>
+            {% else %}
+            <li style="display:inline" class="page_item"><a class="page_link" href="?page={{i}}"> ({{ i }})</a></li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}"><b>Next </b></a>
+        {% endif %} (of <b>{{paginator.num_pages}}</b> page{{page_obj.num_pages|pluralize:'s'}})
+{% endif %}</p>
+
+
+{% endblock content %}
+

@@ -1,0 +1,105 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+{% load forum_tags %}
+
+{% block content %}
+
+<a name="top"></a>
+<h2>Recent Posts</h2><a href="{% url 'home' %}">Liberian Forum</a> / <a
+    href="{% url 'recent'  %}">Recent Posts</a>
+<!-- <div class="vertipics"><a href="https://www.nairaland.com/hopto/top/5993" rel="sponsored"><img
+            src="./Recent Posts_files/yqm1g51uxhrjk6804rjcvpvj2cm9po9n.jpg"></a><a
+        href="https://www.nairaland.com/hopto/top/13605" rel="sponsored"><img
+            src="./Recent Posts_files/2isun74wr1cvaspfbws015u5v6itfwrb.jpg"></a><a
+        href="https://www.nairaland.com/hopto/top/10585" rel="sponsored"><img
+            src="./Recent Posts_files/o7b4qnfaadkqrrb5drg6pdeg4tcfryse.jpg"></a></div> -->
+
+<p>
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+        <a href="{% url 'post_list' topic.id %}?page={{page_obj.previous_page_number}}">Prev</a>
+        {% endif %}
+        
+        {% proper_elided_page_range paginator page_obj.number as page_range %}
+        
+        {% for i in page_range %}
+        {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page.obj.number}}</b></li>
+        {% elif i == paginator.ELLIPSIS %} <li class="active page_item"><span class="">{{paginator.ELLIPSIS}}</span></li>
+        {% else %}
+        <li class="page_item"><a class="page_link" href="?page={{i}}"> ({{ i }})</a></li>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}">Next</a>
+        {% endif %}
+        {% endfor %}
+  (of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize:'s'}})
+    {% endif %}
+
+    </p>
+
+<p></p>
+
+<table>
+    <tbody>
+
+
+{% for post in recent_posts %}
+<!-- POST TITLE -->
+<tr>
+    <td class="bold l pu"><img src="{% static 'img/icons/xx.gif' %}">/<a href="{% url 'section' post.topic.board.name %}">{{post.topic.board.name}}</a> <a href="{% url 'thread_post_list' post.topic.id %}"></a> /<a href="#top">Re:{{post.title}} </a> by <a
+            href="{% url 'profile_view' post.created_by %}" class="user"
+            title="Location: {{topic.created_by.location}}">{{post.created_by}}</a>(<span
+            class="m">{{title.created_by.gender}}</span>): <span class="s"><b>{{reply.date_created|date:"h:i a"}}</b>
+            On
+            <b>{{reply.date_created|date:"jS b"}}</b></span></td>
+</tr>
+<!-- END OF POST TITLE -->
+
+<!--POST BODY OR CONTENT-->
+
+<tr>
+    <td class="l w pd">
+        <div class="narrow">
+            <p id="{{post.id}}"> {{post.message}} </p>
+        </div>
+
+        <p class="s"> (<a href="{% url 'quote_post' post.id %}">Quote</a>)
+
+            (<a href=" {% url 'report_post' post.id %}">Report</a>)
+        <p id='likebutton' style='display:inline-block'>
+            <span class='s' id='likescount' style='font-weight:bold;'>{% if likes_count > 0 %}{{likes_count}}{% endif%}
+            </span>
+            <span class='s' id='liketext' style='font-weight:bold;'>{{like_txt|default:''}}{{likes_count|pluralize:'s'}}
+            </span>
+            (<a id='postlike' onclick="" state="{{state}}" href="{% url 'post_like' post.id  %}">
+                {{like_state}}
+            </a>)
+        </p>
+        <p id='sharebutton' style='display:inline-block'>
+            <span class='s' id='sharescount' style='font-weight:bold;'>{% if shares_count > 0 %}{{shares_count}}{% endif%}
+            </span> <span class='s' id='sharetext'
+                style='font-weight:bold;'>{{share_txt|default:''}}{{shares_count|pluralize:'s'}}
+            </span> (<a id='postshare' onclick=" " state="{{state}}"
+                href="{% url 'post_share' post.id  %}">{{share_state}}
+            </a>)
+        </p>
+
+        </p>
+        {% if post.post_attachments.all %}
+            {% for image in post.post_attachments.all %}
+            <p> <img style="max-width:700px;" class="attachmentimage img" src="/media/images/post_images/{{image.image.name}}" />
+            </p>
+            {% endfor %}
+        {% endif %}
+
+    </td>
+</tr>
+<!-- END OF POST BODY OR CONTENT -->
+
+{% endfor %}
+
+
+    </tbody>
+</table>
+
+{% endblock content %}

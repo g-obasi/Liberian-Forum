@@ -1,0 +1,94 @@
+{% extends 'forum/base.html' %}
+
+{% block section %}
+
+<a name="top"></a>
+<table class="boards">
+    <tbody>
+        <tr>
+            <th>
+                <h3>LIBERTYLAND LIBERIAN FORUMS</h3>
+            </th>
+        </tr>
+        <tr>
+            <td class="l w"><a href="/Libertyland" title=" General "><b>Libertyland / General </b></a>: <a
+                    href="{% url 'section' 'politics' %}" title="Our country Liberia is the land of Freedom!
+                    Discuss."><b>Politics</b></a>, <a href="{% url 'section' 'crime' %}" title=""><b>Crime</b></a>,
+                <a href="{% url 'section' 'romance' %}"
+                    title="Discuss dating, courtship, and romance in marriage."><b>Romance</b></a>, <a
+                    href="{% url 'section' 'job-vacancies' %}"
+                    title="Job/Employment Opportunities; Vacancies In Liberia!"><b>Jobs/Vacancies</b></a>, <a
+                    href="{% url 'section' 'career' %}"
+                    title="Talk about workplace experiences and incidents, professional training and certification, career management, etc.  Employed, self-employed, job seekers."><b>Career</b></a>,
+                <a href="{% url 'section' 'business' %}"
+                    title="Entrepreneurship, Startups, Economics, etc"><b>Business</b></a>, <a
+                    href="{% url 'section' 'education' %}"
+                    title="Libertyland Students Forum: Primary and secondary school, universities, polytechnics, et cetera."><b>Education</b></a>,
+                <a href="{% url 'section' 'autos' %}"
+                    title="Cars, motorbikes, airplanes, et cetera."><b>Autos</b></a>, <a
+                    href="{% url 'section' 'car talks' %}" title="Let&#39;s talk about cars here"><b>Car
+                        Talk</b></a>, <a href="{% url 'section' 'properties' %}"
+                    title="Real Estate: Land, Houses, Flats, Etc."><b>Properties</b></a>, <a
+                    href="{% url 'section' 'health' %}" title="Health related topics."><b>Health</b></a>, <a
+                    href="{% url 'section' 'travel' %}"
+                    title="Tourism, travel.  Interesting destinations within Liberia and abroad. And motoring!"><b>Travel</b></a>,
+                <a href="{% url 'section' 'family' %}"
+                    title="Marriage/Family issues including husband to wife, parent to child, sibling and extended family relationships"><b>Family</b></a>,
+                <a href="{% url 'section' 'culture' %}"
+                    title="Liberian languages, traditions, practices, et cetera."><b>Culture</b></a>, <a
+                    href="{% url 'section' 'religion' %}"
+                    title="Share your faith or religious beliefs here "><b>Religion</b></a>, <a
+                    href="{% url 'section' 'food' %}"
+                    title="Tasty Dishes and how to prepare them.  Anything about food or drink goes here.  This is the Your kitchen!"><b>Food
+                        & Dishes</b></a>, <a href="{% url 'section' 'diaries' %}"
+                    title="Write about your life and be read about.  You won&#39;t even be interrupted by comments.   Libertyland members only!"><b>Diaries</b></a>,
+                <a href="{% url 'section' 'advertisement' %}" title="Libertyland Direct Adverts"><b>Libertyland
+                        Ads</b></a>, <a href="{% url 'section' 'pets' %}"
+                    title="Discuss dogs/puppies, cats/kittens, and other pets. Buy and sell them"><b>Pets</b></a>, <a
+                    href="{% url 'section' 'agriculture' %}"
+                    title="The business and science of crop and livestock production, Agric Science, Agric Economics, etc"><b>Agriculture</b></a>
+            </td>
+        </tr>
+        <tr>
+            <td class="l "><a href="{% url 'section' 'entertainment' %}"
+                    title="Entertainment threads that won&#39;t fit into any child board. "><b>Entertainment</b></a>: <a
+                    href="{% url 'section' 'jokes' %}"
+                    title="Riddles and jokes that fellow Nigerians can appreciate."><b>Jokes Etc</b></a>, <a
+                    href="{% url 'section' 'tv-movies' %}"
+                    title="Local television programmes, local and foreign movies available in Liberia."><b>TV/Movies</b></a>,
+                <a href="{% url 'section' 'music-audio' %}"
+                    title="Talk about your favorite songs, music albums, artists, bands, radio channels and podcasts."><b>Music/audio</b></a>,
+                <a href="{% url 'section' 'celebs' %}"
+                    title="Celebrity obsession & gossip, etc."><b>Celebrities</b></a>, <a
+                    href="{% url 'section' 'fashion' %}"
+                    title="Talk about the latest Fashion Trends, clothes, dress styles, make-up routines, and Mens wear ."><b>Fashion</b></a>,
+                <a href="{% url 'section' 'events' %}"
+                    title="Birthdays, Weddings, other Occasions. Planning, Announcements, Parties."><b>Events</b></a>,
+                <a href="{% url 'section' 'sports' %}"
+                    title="Discuss football, basketball, tennis and any other sports!"><b>Sports</b></a>, <a
+                    href="{% url 'section' 'gaming' %}"
+                    title="Welcome to the world of computer, Internet, video, and board games.  Xbox, PS2, Chess, whatever!"><b>Gaming</b></a>,
+                <a href="{% url 'section' 'forum-games' %}"
+                    title="Play various addictive forum games with fellow members of Libertyland."><b>Forum
+                        Games</b></a>, <a href="{% url 'section' 'books' %}"
+                    title="Discuss, discover and share your favourite titles with members of the forum. This is the Books place"><b>Books
+                        and Literature </b></a></td>
+        </tr>
+        <tr>
+            <td class="l w"><a href="{% url 'section' 'science' %}" title=" class=g"><b>Science/Technology</b></a>:
+                <a href="{% url 'section' 'programming' %}"
+                    title="Software programming, Application development - discuss the various technologies involved in using them.."><b>Programming
+                        / Application Development</b></a>, <a href="{% url 'section' 'books' %}"
+                    title="Website design and development, management of forums, blogs, wikis, and all sorts of websites."><b>Webmasters</b></a>,
+                <a href="{% url 'section' 'computers' %}" title="Personal Computing, etc."><b>Computers and
+                        Laptops</b></a>, <a href="{% url 'section' 'phones' %}"
+                    title="Discuss the latest phones and Gadgets etc"><b>Phones</b></a>, <a
+                    href="{% url 'section' 'computer-graphics' %}"
+                    title="Digital Video and Film, Computer Graphics and Animation.  Tips, Tricks &amp; Tools."><b>Computer
+                        graphics and video editing</b></a>, <a href="{% url 'section' 'tech-market' %}"
+                    title="Buy and sell Phones, Computers and PC accessories here."><b>Technology Market</b></a></td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock section %}

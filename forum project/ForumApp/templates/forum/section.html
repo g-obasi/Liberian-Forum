@@ -1,0 +1,73 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+{% load forum_tags %}
+
+{% block content %}
+
+<a name="top"></a><h2>{{ board.name }} - Liberian Forum </h2><p class="bold"><a href="{% url 'home' %}">Liberty Forum</a> {% if topic.board.parent %} <a href="{% url 'section' topic.board.parent %}"> /{{topic.board.parent}}</a>{% endif %} / <a href="{% url 'section' board.name %}">{{board.name}}</a> </p><p></p>
+
+{% for child_board in child_boards %}
+<table summary=""><tbody><tr><td><b><a href="{% url 'section' child_board.name %}">{{child_board.name}}</a></b>: {{child_board.description}} ({{child_board.topic_count}} topic{{child_board.topic_count|pluralize:'s'}})</td></tr>
+{% endfor %}
+
+<p><a href="{% url 'section' board.name %}">{{board.name}}</a>: {{board.description}} 
+</p>
+
+<!-- vertipics -->
+<p> 
+ <!-- Pagination Start --> 
+ 
+ {% if is_paginated %}
+       
+        {% proper_elided_page_range paginator page_obj.number as page_range %}
+
+        {% for i in page_range %}
+            {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page_obj.number}}</b></li> 
+
+            {% elif i == paginator.ELLIPSIS %} <li class=" active page_item"><span class="">{{paginator.ELLIPSIS}}</span></li> 
+            {% else %}
+                 <li class="page_item"><a class="page_link" href=" ?page={{i}}"> ({{ i }})</a></li> 
+            {% endif %}
+        {% endfor %}
+{% endif %} (of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize:'s'}})
+ <!-- Pagination End --> 
+     (<a  href="{% url 'create_topic' board.name %}">Create New Topic</a>) (<a id="boardfollow" onclick="follow_board(this, request.session.state, board.id);"  href="{% url 'follow_unfollow_board' board.id %}">{{follow_text}}</a>)
+    </p>
+
+
+     <!-- Things Todo 
+    4. Add Section filter by posts, by views, by updated and new and  respective url links 
+    -->
+<p></p>
+
+<table><tbody><tr><th>Topic: <a href="#top">Posts</a> / <a href="#top">Views</a> / <b>Updated</b> / <a href="#top">New</a></th></tr>
+
+{% for topic in topics %}
+
+    <tr><td id="{{topic.id}}" class="{% cycle 'w' ''%}"><a name=""></a> <img src="{% static 'img/icons/sticky.gif' %}"> <b><a href="{% url 'thread_post_list' topic.id %}">{{topic.title}}</a> </b> 
+        
+        <!-- <a href="/1">(2)</a>  <a href="/2">(3)</a>  <a href="/3">(4)</a> ...  <a href="/138">(139)</a>  <a href="/139">(140)</a>  <a href="/140">(141)</a>  -->
+     <br><span class="s">by <b><a href="{% url  'profile_view' topic.created_by  %}">{{topic.created_by}}</a></b>. <b>{{topic.post_count}}</b> post{{topic.post_count|pluralize:'s' }} &amp; <b>{{topic.views}}</b> view{{topic.post_count|pluralize:'s' }}. <b>{{ topic.date_created|date:"h:i a"}}</b> On <b>{{topic.date_created|date:"jS b"}}</b> </span></td></tr>
+    
+{% endfor %}
+</tbody> 
+</table>
+
+<p> 
+     {% if is_paginated %}
+        {% proper_elided_page_range paginator page_obj.number as page_range %}
+        {% for i in page_range %}
+            {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page_obj.number}}</b></li> 
+
+            {% elif i == paginator.ELLIPSIS %} <li class=" active page_item"><span class="">{{paginator.ELLIPSIS}}</span></li> 
+            {% else %}
+                 <li class="page_item"><a class="page_link" href=" ?page={{i}}"> ({{i}})</a></li> 
+            {% endif %}
+        {% endfor %}
+    {% endif %} (of <b>{{paginator.num_pages}}</b> page{{paginator.num_pages|pluralize:'s'}})
+    (<a href="{% url 'create_topic' board.name %}">Create New Topic</a>) (<a href="{% url 'follow_unfollow_board' board.id %}">{{follow_text}}</a>) 
+</p>
+
+<!-- <div class="vertipics"><a href="hopto/politics/5993" rel="sponsored"><img src=".//yqm1g51uxhrjk6804rjcvpvj2cm9po9n.jpg"></a><a href="hopto/politics/10585" rel="sponsored"><img src=".//o7b4qnfaadkqrrb5drg6pdeg4tcfryse.jpg"></a><a href="hopto/politics/12058" rel="sponsored"><img src=".//2jyfq3bpp1uqm6tmdza64sf2x4uoto79.jpg"></a></div> -->
+
+{% endblock content %}

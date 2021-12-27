@@ -1,0 +1,158 @@
+{% extends 'forum/base.html' %}
+{% load forum_tags %}
+{% load static %}
+
+{% block content %}
+
+<h2> {{topic.title|title}} - {{topic.board}} - Liberian Forum  </h2>
+<p class="bold"><a href="{% url 'home' %}"> Liberian Forum </a> {% if topic.board.parent %}/ <a href="{% url 'section' topic.board.parent %}"> {{topic.board.parent}}</a>{% endif %} / <a href="{% url 'section' topic.board.name %}"> {{topic.board.name}}</a> / <a href="{% url 'section' topic.board.name %}">
+        {{ topic.board.name}} </a> / <a href="#up"> {{ topic.title}}
+    </a> ({{topic.views}} view{{topic.views|pluralize:'s'}}) </p>
+
+<!-- RECOMMENDATIONS -->
+
+ <p> 
+     {% for post in similar_posts %}
+    <a href="{% url 'post_list' post.topic.id %}">{{post.topic.title}}</a>
+     {% endfor %}
+
+
+<!-- vertipics -->
+<!-- UPPER PAGINATION -->
+<p>
+{% if is_paginated %}
+        {% if page_obj.has_previous %}
+        <a href="?page={{page_obj.previous_page_number}}">Prev</a> 
+        {% endif %}
+
+        {% proper_elided_page_range paginator page_obj.number as page_range %}
+
+        {% for i in page_range %}
+            {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page_obj.number}}</b></li> 
+            {% elif i == paginator.ELLIPSIS %} <li style="display:inline" class="active page_item"><span class="">{{paginator.ELLIPSIS}}</span></li> 
+            {% else %}
+                 <li style="display:inline" class="page_item"><a class="page_link" href="?page={{i}}"> ({{ i }})</a></li> 
+            {% endif %}
+        {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a href="?page={{page_obj.next_page_number}}"><b>Next</a> </b>
+            {% endif %}
+{% endif %} (<a href="{% url 'reply_topic' topic.id %}"><b>Reply</b></a>)
+ (<a id="topicfollow" class="unft" onclick="follow_topic(this, {{request.session.followed}}, {{topic.id}}); " href="{% url 'follow_unfollow_topic' topic.id  %}">{{follow_text}}</a>)
+    <span class="small">(<a href="#down"><b>Go
+                Down</b></a>)</span></p>
+<p>
+<!-- END UPPER PAGINATION -->
+
+<!-- POST -->
+
+<table summary="posts">
+
+<tbody>
+
+{% for post in post %}
+<!-- POST TITLE -->
+        <tr>
+            <td class="bold l pu"><a href="#top">{% if not forloop.first %}Re:{% endif %} {{topic.title}} </a> by <a
+                    href="{% url 'profile_view' post.created_by %}" class="user"
+                    title="Location: {{topic.created_by.location}}">{{post.created_by}}</a>(<span
+                    class="m">{{title.created_by.get_gender_display}}</span>): <span
+                    class="s"><b>{{ post.date_created|date:"h:i a"}}</b>
+                    On
+                    <b>{{post.date_created|date:"jS b"}}</b></span></td>
+        </tr>
+<!-- END OF POST TITLE -->
+
+<!--POST BODY OR CONTENT-->
+
+        <tr>
+            <td class="l w pd">
+                <div id={{post.id}} class="narrow">
+                    <p> {{post.message}} </p>
+                </div>
+
+                <p class="s inline ml-5" > {% if post.created_by is request.user %}
+                     (<a href="{% url 'update_post' post.id %}">Modify</a>)
+                      {% endif %}
+                    (<a href="{% url 'quote_post' post.id %}">Quote</a>)
+
+                    (<a href=" {% url 'report_post' post.id %}">Report </a>) 
+                </p> 
+                    <p id='likebutton' style='display:inline-block' >
+                    <span class='s' id='likescount' style='font-weight:bold;'>{{likes_count}}
+                       </span> 
+                       <span class='s' id='liketext' style='font-weight:bold;'>{{like_txt}}{{likes_count|pluralize:'s'}} </span> 
+                    (<a id='postlike' onclick=""  class='s' state="{{state}}" href="{% url 'post_like' post.id  %}">{{like_state}}</a>)</p>
+                    <p id='sharebutton' style='display:inline-block'>
+                    <span class='s' id='sharescount' style='font-weight:bold;'>{{shares_count}}
+                    </span> <span class='s' id='sharetext'
+                        style='font-weight:bold;'>{{share_txt}}{{shares_count|pluralize:'s'}}
+                    </span> (<a id='postshare' class='s'  onclick=" " state="{{state}}" href="{% url 'post_share' post.id  %}">{{share_state}}</a>)  
+                   {% if post.created_by is request.user %} (<a class='float-left' href="{% url 'delete_post' post.id %}">Delete</a>){% endif %} </p>
+
+                </p>
+               <!-- {{post.post_attachments.image.path}}  -->
+        {% if post.post_attachments.all %}
+            {% for image in post.post_attachments.all %}
+            <p> <img style="max-width:700px;" class="attachmentimage img" src="/media/images/post_images/{{image.image.name}}" /> </p>
+            {% endfor %}
+        {% endif %}
+
+            </td>
+        </tr>
+        <!-- END OF POST BODY OR CONTENT -->
+
+{% endfor %}
+        <!-- Down -->
+<div class="nocopy">
+
+<p>
+
+<!-- vertipics -->
+
+
+            <!-- VIEWING THIS TOPIC -->
+            <!-- <p class="nocopy">Viewing this topic: <a href="https://www.nairaland.com/greenfield1">Greenfield1</a></p> -->
+            <!-- <p class="small">(<a href="#up"><b>Go
+                        Up</b></a>)</p>
+            <p></p> -->
+
+        </div>
+
+    </tbody>
+</table>
+
+<p>
+
+{% if is_paginated %}
+    {% if page_obj.has_previous %}
+    <a href="?page={{page_obj.previous_page_number}}">Prev</a>
+    {% endif %}
+
+    {% proper_elided_page_range paginator page_obj.number as page_range %}
+
+    {% for i in page_range %}
+        {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page_obj.number}}</b></li>
+        {% elif i == paginator.ELLIPSIS %} <li class="active page_item"><span class="">{{paginator.ELLIPSIS}}</span></li>
+        {% else %}
+        <li style="display:inline" class="page_item"><a class="page_link" href="?page={{i}}"> ({{ i }})</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_previous %}
+    <a href="?page={{page_obj.next_page_number}}">Next</a>
+    {% endif %}
+{% endif %} (<a href="{% url 'reply_topic' topic.id %}"><b>Reply</b></a>) (<a id="topicfollow" class="unft"
+    onclick="follow_topic(this, {{request.session.followed}}, {{topic.id}}); "
+    href="{% url 'follow_unfollow_topic' topic.id %}">{{follow_text}}</a>)
+</p>
+<!-- END LOWER PAGINATION -->
+
+
+<p>
+    {% for post in similar_posts %}
+    <a href="{% url 'post_list' post.topic.id %}">{{post.topic.title}}</a>
+    {% endfor %}
+</p>
+{% endblock content %}

@@ -1,0 +1,50 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block meta %} 
+       {{block.super}} 
+
+
+{% endblock meta %} 
+
+{% block title %} Create Topic {% endblock title %}
+
+
+{% block content %}
+<p> </p>
+<h2>Liberian Forum -New Topic</h2><p class=bold><a href="{% url 'home' %}">Libertyland Forum</a> / <a href="{% url 'home' %}">Liberty Forum </a> / <a href="{% url 'section' board.name %}">{{board.name}}</a>  / <a href="#"><b>New topic</b><a><p>
+<table summary="posting form"><tr><td class="l">
+{% include 'posting_rules.html' %}
+
+
+<form method=POST  id="postform" name="postform" enctype="multipart/form-data">
+{% csrf_token %} 
+
+{{form.non_field_errors }}
+
+{% for hidden_field in form.hidden_fields %}
+    {{hidden_field.errors}}
+    {{hidden_field}}
+{% endfor %}
+<p><b>Subject</b>:
+{{form.title}}
+<p style='display:inline-block; margin:30px;'><b> Section</b>:
+<!-- {{form.section}} -->
+
+<p><b>Message</b>:
+             {% include 'editor.html' %}
+       
+    {% comment %}    {{form.message}}{% endcomment %}
+        {% comment %} <!--script type="text/javascript">document.postform.body.focus()/<script>-->{% endcomment %}
+        <!-- <input type=submit value="Submit" accesskey=s><input type="checkbox" name="follow" checked="yes" value="on"> Follow this topic -->
+        
+        <p>
+        <div id = "attachments" class="clearfix">
+        <b>Attachments</b>: (maximum size: <b>4MB</b> for images) <br>
+        {{form.image}}
+        </div>
+        
+        </form></table>
+
+{% endblock content %}
+

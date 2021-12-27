@@ -1,0 +1,73 @@
+{% extends 'forum/base.html' %}
+{% block content %}
+
+
+<h2>Search</h2><form action="search" class="inline"><table summary="search"><tbody><tr><td class="w">
+{{form.search_input }} &nbsp;<label>
+        {{form.select_board}}
+        &nbsp;
+        <label>{{ form.search_topics_only}}Topics</label>&nbsp;
+    <label>{{ form.search_images.only}}Images</label>&nbsp;
+<input type="submit" value="Search"> &nbsp;</label></td></tr></tbody></table></form>
+
+
+{% if is_paginated %}
+{% if page_obj.has_previous %}
+<a href="?page={{page_obj.previous_page_number}}">Prev</a>
+{% endif %}
+
+{% proper_elided_page_range paginator page_obj.number as page_range %}
+
+{% for i in page_range %}
+{% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page_obj.number}}</b></li>
+{% elif i == paginator.ELLIPSIS %} <li style="display:inline" class="active page_item"><span
+        class="">{{paginator.ELLIPSIS}}</span></li>
+{% else %}
+<li style="display:inline" class="page_item"><a class="page_link" href="?page={{i}}"> ({{ i }})</a></li>
+{% endif %}
+{% endfor %}
+
+{% if page_obj.has_next %}
+<a href="?page={{page_obj.next_page_number}}"><b>Next</a> </b>
+{% endif %}
+{% endif %}(of <b>{{paginator.num_pages}}</b> page{{page_obj.num_pages|pluralize:'s'}})
+
+ <table><tbody>
+     
+{% for result in search_result %}
+{{result.title}}{{result.message}}
+
+    <tr><td class="bold l pu"><a name="107139845"></a><a name="msg107139845"></a><img src="./Search_files/xx.gif">  <a href="politics">Politics</a> / <a href="-10-million#107139845">Development Bank Approves $10 Million Equity Investment</a> by <a href="postbox" class="user">postbox</a>: <span class="s"><b>3:27pm</b> On <b>Oct 28</b></span></td></tr><tr><td id="pb107139845" class="l w pd"><div class="narrow"> ARCH Cold Chain Solutions East Africa Fund (CCSEAF) to support the development, construction and operation of <span class="highlight">greenfield</span> <br><br>Traders and retailers represent roughly 40% of the total gross emerging markets investment advisor based in the United Kingdom.<br><br>SOURCE:<a rel="ugc" href="Link for source"></a></div><p class="s"> (<a href="">Report</a>)  <b id="lpt107139845">  </b> 
+        (<a id="lpl107139845" onclick='();' href="">Like</a>)<b id="shb107139845"></b> (<a id="sh107139845" onclick="" href="">Share</a>)</p><p><img class="attachmentimage img" src="."> </p></td></tr> 
+{% endfor %}
+
+</tbody></table>
+
+     
+<!-- Pagination -->
+
+{% if is_paginated %}
+        {% if page_obj.has_previous %}
+        <a href="{% url 'post_list' topic.id %}?page={{page_obj.previous_page_number}}">Prev</a> 
+        {% endif %}
+
+        {% proper_elided_page_range paginator page_obj.number as page_range %}
+
+        {% for i in page_range %}
+            {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page.obj.number}}</b></li> 
+            {% elif i == paginator.ELLIPSIS %} <li class="active page_item"><span class="">{{paginator.ELLIPSIS}}</span></li> 
+            {% else %}
+                 <li class="page_item"><a class="page_link" href="?page={{i}}"> {{ i }}</a></li> 
+            {% endif %}
+            {% if page_obj.has_next %}
+            <a href="{% url 'post_list' topic.id %}?page={{page_obj.next_page_number}}">Next</a> 
+            {% endif %}
+        {% endfor %}
+{% endif %} (of <b>{{paginator.num_pages}}</b> page{{page_obj.num_pages|pluralize:'s'}})
+
+</p>
+
+
+
+    
+{% endblock content %}

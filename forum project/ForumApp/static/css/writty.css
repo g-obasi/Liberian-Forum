@@ -1,0 +1,612 @@
+body {
+    margin: 0;
+    color: var(--text);
+    font-size: 21px;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+    display: block;
+    margin-block-start: 16px;
+    margin-block-end: 16px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    display: block;
+    margin-block-start: 14px;
+    margin-block-end: 14px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+p {
+    font-size: 21px;
+    display: block;
+    margin-block-start: 12px;
+    margin-block-end: 12px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+h5 {
+    font-size: 18px;
+    font-weight: 100;
+    display: block;
+    margin-block-start: -3px;
+    margin-block-end: 10px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+blockquote {
+    font-size: 21px;
+    color: var(--text);
+    font-style: italic;
+    display: block;
+    padding: 17px;
+    margin-block-start: 12px;
+    margin-block-end: 12px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+
+pre {
+    white-space: pre-wrap;
+    background-color: var(--dark-background);
+    color: var(--text);
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+a:-webkit-any-link {
+    color: color: var(--text);
+}
+
+.imgView {
+    width: fit-content;
+    padding: 20px 0px 20px 0px;
+}
+
+/* Sidebar */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -250px;
+    z-index: 0;
+    width: 200px;
+    height: 100%;
+    padding: 30px 14px;
+    background: var(--dark-background);
+    transition: all 300ms ease-in-out;
+}
+
+.sidebar-button,
+.save-button {
+    font-family: 'ubuntu', sans-serif;
+    color: var(--text);
+    font-size: 15px;
+    border: 0;
+    padding: 20px;
+    cursor: pointer;
+    background: none;
+    height: 40px;
+    outline: none;
+}
+
+.save-button {
+    margin-top: 10px;
+}
+
+.sidebar-button:hover,
+.save-button:hover {
+    outline: none;
+    color: #fcaf12;
+}
+
+.sidebar-button.active,
+save-button.active,
+accordion-button.active {
+    color: #fcb312;
+}
+
+.sidebar-secondary {
+    font-size: 11px;
+    color: #999;
+    padding: 0px 0px 0px 20px;
+
+}
+
+.sidebar-section {
+    font-size: 15px;
+    color: #999;
+    width: 200px;
+    font-family: 'ubuntu', sans-serif;
+    position: relative;
+    margin: 10px 24px 15px 24px;
+    float: left;
+
+}
+
+.sidebar-accordion {
+    max-height: 0px;
+    width: 120px;
+    opacity: 0;
+    -webkit-transition: all 0.5s ease-in-out 0s;
+    transition: all 0.5s ease-in-out 0s;
+}
+
+.save-button:hover ~ .sidebar-accordion,
+.sidebar-accordion:hover {
+    opacity: 1;
+    max-height: 120px;
+    -webkit-transition: all 0.5s ease-in-out 0s;
+    transition: all 0.5s ease-in-out 0s;
+}
+
+.accordion-button {
+    font-family: 'ubuntu', sans-serif;
+    color: var(--text);
+    font-size: 15px;
+    border: 0;
+    padding: 6px 0px 0px 40px;
+    cursor: pointer;
+    background: none;
+    height: 24px;
+    outline: none;
+
+}
+
+.accordion-button:hover {
+    outline: none;
+    color: #fcaf12;
+}
+
+.sidebar-bottom {
+    position: absolute;
+    width: 200px;
+    font-size: 15px;
+    text-align: left;
+    bottom: 0;
+    height: 250px;
+}
+
+/* Switch */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+    margin: 8px 10px 8px 24px;
+}
+
+/* .switch input {
+    display: none;
+} */
+
+/* .switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--light-background);
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 30px;
+} */
+
+/* .switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 0;
+    bottom: 0px;
+    background-color: #f3f3f3;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 30px;
+    -webkit-box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.2);
+} */
+
+/* input:checked + .switch-slider {
+    background-color: #fcaf12;
+}
+
+input:focus + .witch-slider {
+    box-shadow: 0 0 1px #fcaf12;
+}
+
+input:checked + .switch-slider:before {
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
+} */
+
+.switch-label {
+    font-family: 'ubuntu', sans-serif;
+    color: var(--text);
+    font-size: 15px;
+    background: none;
+    height: 40px;
+    outline: none;
+    position: absolute;
+    margin: 2px 0px 0px 44px;
+    width: 100px;
+}
+
+/* Menu Icon */
+
+/* #menu-toggle {
+    display: none;
+}
+
+.menu-icon {
+    cursor: pointer;
+    position: absolute;
+    top: 12px;
+    right: 17px;
+    padding: 12px;
+    font-size: 20px;
+    z-index: 1;
+    transition: all 300ms ease-in-out;
+}
+
+#menu-toggle:checked ~ .sidebar {
+    right: 0px;
+}
+
+#menu-toggle:checked + .menu-icon {
+    right: 247px;
+} */
+
+/* Popup */
+
+.popup-button {
+    font-family: 'ubuntu', sans-serif;
+    color: var(--text);
+    font-size: 15px;
+    width: 131px;
+    border: 0;
+    padding: 12px 0px 3px 0px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    background: var(--background);
+}
+
+.popup-button:hover {
+    outline: none;
+    color: #2b7eeb;
+}
+
+.popup-button.active {
+    background: #2b7eeb;
+}
+
+/* Toolbar */
+
+.toolbar {
+    min-height: 20px;
+    background: var(--background);
+    /* width: 45px; */
+    /* left: 60px; */
+    /* position: fixed; */
+    -webkit-box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    margin-top: 3px;
+    z-index: 10;
+}
+
+.toolbar-button {
+    font-size: 15px;
+    border: 0px;
+    width: 44px;
+    padding: 20px 15px 0px 15px;
+    margin: 3px 0 0 0;
+    cursor: pointer;
+    color: var(--text);
+    background: var(--background);
+    outline: 0;
+}
+
+.toolbar-button:hover {
+    outline: none;
+    color: #2b7eeb;
+}
+
+.toolbar-button.active {
+    color: #2b7eeb;
+}
+
+.last {
+    font-size: 15px;
+    border: 0px;
+    width: 44px;
+    padding-bottom: 17px;
+    margin: 0 0 3px 0;
+    cursor: pointer;
+    background: var(--background);
+}
+
+.tools {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    border-right: 1px solid lightgray
+}
+
+/* Popup */
+
+.popup {
+    display: inline-block;
+    position: relative
+}
+
+.popup:hover .popup-window {
+    color: #1a1a1a
+}
+
+.container .popup:hover .popup-window {
+    display: inline-block
+}
+
+.popup-window {
+    z-index: 1;
+    font-family: 'Buenard', sans-serif;
+    display: none;
+    position: absolute;
+    background-color: var(--background);
+    border-radius: 4px;
+    -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    margin: -30px 40px;
+    padding: 3px 15px 10px 15px;
+    outline: 0;
+}
+
+.popup .popup-window.hover-popup {
+    display: block
+}
+
+.popup-item {
+    cursor: pointer;
+    color: var(--text);
+    cursor: pointer;
+    font-family: 'Buenard', sans-serif;
+    background: var(--background);
+    border: 0;
+    width: 100%;
+    padding: 6px 3px 6px 3px;
+    outline: 0px;
+}
+
+.Heading {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.Subheading {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.Body {
+    font-size: 21px;
+}
+
+.Caption {
+    font-size: 18px;
+}
+
+.popup-item i {
+    min-width: 100px;
+    padding: auto 40px
+}
+
+.popup-item:hover {
+    color: #2b7eeb
+}
+
+.popup-item.active {
+    color: #2b7eeb;
+}
+
+/* Container, Editor and Content */
+
+.container {
+    /* position: relative; */
+    width: 100%;
+    margin: 0 auto;
+}
+
+.editor {
+    font-family: 'Buenard', sans-serif;
+    display: block;
+    max-width: 900px;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: auto;
+    padding: 0px 50px 50px 150px;
+    margin-top: 64px;
+}
+
+.content {
+    font-family: 'Buenard', sans-serif;
+    font-size: 21px;
+    /* position: relative; */
+    display: inline-block;
+    width: 100%;
+    background: var(--background);
+    color: var(--text);
+    min-height: 900px;
+    padding: 10px;
+    padding-top: 0;
+    margin-top: -4px;
+    overflow-wrap: break-word;
+    background: var(--background);
+    color: var(--text);
+    border: 0;
+    border-radius: 4px;
+    outline: 0px;
+}
+
+/* [contenteditable] {
+
+} */
+
+#counter {
+    font-family: 'ubuntu', sans-serif;
+    position: absolute;
+    padding: 2px 5px 0 5px;
+    font-size: 15px;
+    color: #999;
+    font-weight: 100;
+    right: 0;
+    bottom: -40px;
+    width: 42px;
+    text-align: center;
+}
+
+/* .logo {
+    opacity: var(--alpha);
+    padding-right: 10px;
+    bottom: 10px;
+    position: fixed;
+} */
+
+/* Print Settings */
+
+/* @media print {
+
+    div {
+        word-wrap: normal !important;
+    }
+
+    .toolbar,
+    .menu-icon,
+    .sidebar {
+        display: none;
+    }
+
+    .editor {
+        visibility: visible;
+        margin: 0px 0px 0px -110px;
+        height: auto;
+        overflow: visible;
+    }
+
+    .content {
+        font-size: 17px;
+        background: none;
+        color: #272930;
+        visibility: visible;
+        overflow: visible;
+    }
+
+    [contenteditable] {
+        color: #272930;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+    h2 {
+        font-size: 21px;
+    }
+    p {
+        font-size: 17px;
+    }
+    h5 {
+        font-size: 14px;
+    }
+
+    li {
+        font-size: 17px;
+        color: #272930;
+    }
+
+    a {
+        color: #272930;
+    }
+
+    blockquote {
+        font-size: 17px;
+        color: #272930;
+    }
+
+    span[style] {
+        color: #272930!important;
+    }
+
+}
+
+@page {
+    /*The A4 paper size is 210 mm wide by 297 mm long*/
+    size: 210mm 297mm;
+    margin: 10mm;}
+ */
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: var(--dark-background);
+}
+
+/* Hide file input */
+
+input[type="file"] {
+    display: none;
+}
+
+/* Variables */
+
+:root {
+    --background: #fff;
+    --light-background: #ccc;
+    --dark-background: #f3f3f3;
+    --text: #272930;
+    --alpha: 0.4;
+}
+
+.dark-theme {
+    --background: #272930;
+    --light-background: #484857;
+    --dark-background: #24242b;
+    --text: #d3d3d3;
+    --alpha: 1;
+    background: var(--background);
+
+}
+
+/* Break Points */
+
+@media only screen and (max-width: 680px) {
+
+    .toolbar {
+        left: 0px;
+    }
+    .editor {
+        padding: 50px 20px 50px 70px;
+    }
+
+}

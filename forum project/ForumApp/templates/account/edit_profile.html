@@ -1,0 +1,64 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block content %}
+<a id="top"></a>
+<h2>Edit My Profile</h2>
+<p> <a href="{% url 'home' %}">Liberty Forum</a> /
+    <a href="{% url 'profile_view' {{user.username}} %}">My profile</a> / Edit My Profile<p>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{form.non_field_errors }}
+
+            {% for hidden_field in form.hidden_fields %}
+            {{hidden_field.errors}}
+            {{hidden_field}}
+            {% endfor %}
+
+            <table summary="profile editing form">
+                <tr>
+                    <td><b>Email</b>: {{user.email}} &nbsp;&nbsp;<a href="{% url 'change_email' %}">Change Email</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="w"><b>Birthday</b>:
+                        {{forms.date_of_birth}}</td>
+                </tr>
+                <tr>
+                    <td class=""><b>Gender</b>:
+                        {{form.gender}}</td>
+                </tr>
+
+                <tr>
+                    <td valign="top" class="w"><b>Personal text</b>:
+                      <span class='s'>{{form.bio}}</span></td>
+                </tr>
+               
+                <tr>
+                    <td class="w"><b>Picture</b>:{{form.profile_pic}}
+                        <span class='small' style='max-width:20; max-height:20px; border-radius:50%'></span>{{user.profile_pic}}
+                        <p><input type="checkbox" name="removeavatar"> Remove this image</td>
+                </tr>
+                <tr>
+                    <td><b>Location</b>: {{form.location}}</td>
+                    <span class='small'>Default:{{user.location}}</span>
+                </tr>
+                <tr>
+                    <td><a onclick="" >Add social account</a>
+                    
+                    
+                    </td>
+                    <!-- <span class='small'>Default:{{user.twitter}}</span> -->
+                </tr>
+               
+
+                <tr>
+                    <td class="w"><a href="{% deactivate_account %}">Deactivate Account</a></td>
+                </tr>
+            </table>
+            <p><input type="submit" value="Update Profile">
+        </form>
+        <!-- <p class=small>(<a href="#up"><b>Go Up</b></a>)<p> -->
+
+{% endblock content %}

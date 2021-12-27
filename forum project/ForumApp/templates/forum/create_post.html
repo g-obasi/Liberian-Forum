@@ -1,0 +1,50 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>create post</title>
+</head>
+
+{% block content %}
+<p></p>
+<h2>Liberian Forum - New Post</h2><p class=bold><a href="/">Liberian Forum</a> / <a href="/">Liberian Forum</a> / <a href="{% url 'section' {{post.topic.board}} %}">{{post.topic.board}}</a>  / <a href=" "><b>New Post ({{post.title}})</b><a><p>
+<table summary="posting form"><tr><td class="l">
+    {% include 'posting_rules.html' %}
+
+<form method=POST  id="postform" name="postform" enctype="multipart/form-data">
+{% csrf_token %} 
+
+{{form.non_field_errors }}
+
+{% for hidden_field in form.hidden_fields %}
+    {{hidden_field.errors}}
+    {{hidden_field}}
+{% endfor %}
+<p><b>Subject</b>:
+{{form.title}}</p>
+<p><b>Message</b>:
+    {{form.message}}</p>
+{% include 'editor.html' %}
+
+        {{form.message}}
+        {% comment %} <!--script type="text/javascript">document.postform.body.focus()</script>--> {% endcomment %}
+        <input type=submit value="Submit" accesskey=s><input type="checkbox" name="follow" checked="yes" value="on"> Follow this topic
+        
+        <br>
+        <div id = "attachments" class="clearfix">
+        <b>Attachments</b>: (maximum size: <b>4MB</b> for pictures and <b>250kB</b> for other files)<br>
+        {{form.file}}
+        <!-- <input type="file" name="attachment"><br> -->
+        </div>
+        
+        </form></table>
+
+{% comment %} <form method="post" enctype="multipart/form-data">
+   {% csrf_token %}
+   {{form}}
+    <input type="submit">
+</form> {% endcomment %}
+
+
+{% endblock content %}

@@ -1,0 +1,52 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+{% block content %}
+
+<a name="top"></a><h2>My Topics</h2><a href="{% url 'home' %}">Liberty Forum</a> / <a href="{% url 'profileView' topic.created_by %}">My Profile</a> / <a href="{% url 'my_topic' %}">My Topics</a>
+
+<!-- Ads -->
+
+<p>
+{% if page_obj %}
+        {% if page_obj.has_previous %}
+        <a href="?page={{page_obj.previous_page_number}}">Prev</a> 
+        {% endif %}
+
+        {% proper_elided_page_range paginator page_obj.number as page_range %}
+
+        {% for i in page_range %}
+            {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page.obj.number}}</b></li> 
+            {% elif i == paginator.ELLIPSIS %} <li class="active page_item"><span class="">{{paginator.ELLIPSIS}}</span></li> 
+            {% else %}
+                 <li class="page_item"><a class="page_link" href="?page={{i}}"> {{ i }}</a></li> 
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}">Next</a>
+        {% endif %}
+        (of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize 's'}})
+{% endif %}
+</p>
+<p></p>
+
+<table><tbody>
+    
+ {% for topics in my_topics   %}
+
+    <tr><td id="" class="w"><a name=""></a> <img src="{% static 'img/normal_post.gif' %}"> <b><a href="">{{topic.board.name}}</a></b> / <b><a href="">{{topic.title}}</a> </b><br><span class="s">by <b><a
+                        href="{% url 'profileView' topic.created_by %}" class="user" title="Location: {{topic.created_by.location}}">{{topic.created_by}}</a></b>. <b>{{topic_post_count}}</b> post {{topic_post_count|pluralize 's'}} <b>{{topic.views}}</b> view{{topic.views|pluralize 's'}}. <b>{{ topic.date_created|date:"h:i a"}}</b>
+                        On
+                        <b>{{topic.date_created|date:"jS b"}}</b> </span></td>
+    </tr>
+    
+    
+      {% empty %}
+                <tr>
+                    <span class="small"><td>You have not Created any Topic yet as soon as you do they will show up here</span>
+                    
+                    </td>
+                </tr>
+    {% endfor %}
+
+
+    {% endblock content %}

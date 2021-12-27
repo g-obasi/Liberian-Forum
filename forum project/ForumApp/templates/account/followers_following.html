@@ -1,0 +1,50 @@
+{% extends 'forum/base.html' %}
+
+{% block content %}
+<table summary="" id="up">
+    <a name="top"></a>
+<h2>Followers</h2>
+<p><a href="{% url 'home' %}">Liberty Forum</a> / <a
+        href="#top">Followers</a></p>
+<p></p>
+{% for follower in user_followers %}
+<table>
+    <tbody>
+        <tr>
+            <td><a href="{% url 'profile_view' follower.username %}">{{follower.username}}</a>
+        
+            </td>
+        </tr>
+
+        {% empty %}
+            <tr>
+                <td>You have no followers at this time</td>
+            </tr>
+  
+{% endfor %}
+    <br />
+    <br />
+
+{% for following in user_followings %}
+
+    <tr>
+        <td><a href="{% url 'profile_view' following.username %}">{{following.username}}</a>
+    
+        </td>
+    </tr>
+
+{% empty %}
+        <tr>
+            <td>You are not following anyone at this time
+
+            </td>
+        </tr>
+
+{% endfor %}
+
+    </tbody>
+</table>
+<p class="small">(<a href="#top"><b>Go Up</b></a>)</p>
+<p></p>
+<br>
+{% endblock content %}

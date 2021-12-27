@@ -1,0 +1,14 @@
+{% extend base.html %} {% load forum_tags %} {% load static %}
+ {% block content%}
+<table>
+  <tbody>
+    {% for post in posts %}
+
+    <tr>
+      <td>{{post.message}}-{{post.topic.title}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% block endcontent %}

@@ -1,0 +1,81 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block meta %}
+{% super.block %}
+
+{% endblock meta %}
+
+{% block content %}
+<table summary="posting form"><tr><td class="l">    {% include 'posting_rules.html' %}
+
+
+<form method=POST  id="postform" name="postform" enctype="multipart/form-data">
+{% csrf_token %} 
+
+{{form.non_field_errors }}
+
+{% for hidden_field in form.hidden_fields %}
+    {{hidden_field.errors}}
+    {{hidden_field}}
+{% endfor %}
+
+<p><b>Message</b>:</p>
+{% include 'editor.html' %}
+
+<!-- <p>{{form.comment_text}}</p>
+
+        <div id="editor" class="editor" data-simplebar data-simplebar-auto-hide="false">
+            <div id="content" class="content" contenteditable="true">
+                <p>Once upon a time...✏️</p>
+            </div> -->
+
+         <!--script type="text/javascript">document.postform.body.focus()</script> --> 
+        <!-- <input type=submit value="Submit" accesskey=s><input type="checkbox" name="follow" checked="yes" value="on"> Follow this topic -->
+        
+        <p>
+        <div id = "attachments" class="clearfix">
+        <b>Attachments</b>: (maximum size: <b>5MB</b> for pictures )<br>
+        {{form.file}}
+        </div>
+ </form>
+
+ </td>
+</tr>
+</table>
+
+<a href="#top"></a>
+
+{% if topic.topic_post.all %} 
+    {% for reply in topic.topic_post.all %} <!--Replies for a particular post-->
+ <table>
+<tr >
+      <td class = "bold l pu" >
+      <!--RE: Ajimobi: Buhari Reacts To Death Of Ex - Oyo Governor by Ikennamurphy: 4: 10 am-->
+
+      <p> Re:  {{reply.post.title}} </a > by <a href="#top" class ="user" > {{reply.created_by|lower}} </a> <span class="s" > <b> {{ reply.date_created|date:"h:i a"}} </b> on <b> {{reply.date_created|date:"jS b"}} </b> </span> </p>
+
+      </td> </tr>
+
+      <tr>
+      <td class = "l w pd" id = "">
+      <div class = "message">
+    <p> {{reply.message}} </p> 
+        {% if reply.comment_image %} 
+			  <p> <img class = '' style = "max-width:700px;" src= "{{ reply.comment_image.url}}" /> {{reply.id}} <p>
+		{% endif %} 
+            <p style= 'display:inline;'> <a href = "" > (reply) </a ><span class= 's' id='likescount'  style='font-weight:bold;'>{{total_likes}} Like{{total_likes|pluralize:'s'}}</span> <a id ='comlike' href='{% url "comment_like" reply.id  %}'  >{{liked}} </a> </p> 
+            </div > 
+            <br/>
+
+      </td>
+
+       </tr>
+    {% endfor %} 
+{% endif %}
+
+      </div>
+      </table>
+
+<script src ="{% static 'js/base.js' %}"> </script>
+{% endblock content %}
