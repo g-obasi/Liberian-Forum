@@ -4,11 +4,12 @@ from datetime import datetime
 
 from django.db import models
 from django.utils import timezone
+from datetime import date 
 from django.contrib.auth.models import AbstractUser
 import PIL
-# from PIL import Image
-# from PIL import Image
 
+# from PIL import Image
+# from PIL import Image
 
 # Create your models here.
 
@@ -22,20 +23,20 @@ class User(AbstractUser):
     SEX = (
         ('M', 'male'),
         ('F', 'female')
-
     )
-    email = models.EmailField(('email address'), unique=True)
+    # date_joined, is_staff,is_active,last_login
+    email = models.EmailField(('email address'), blank=True, null=True, unique=True)
     profile_pic = models.ImageField(upload_to=profile_img_directory, help_text="Not more than 2MB or less please",
                                     null=True, blank=True)  # don't forget to install pillow
-    date_of_birth = models.DateField("your date of birth", null=True)
+    date_of_birth = models.DateField("your date of birth", blank=True, null=True)
     # don't forget to add the choices
-    gender = models.CharField(choices=SEX, max_length=1, null=True)
+    gender = models.CharField(choices=SEX, max_length=1, blank=True, null=True)
     bio = models.TextField(
         max_length=255, help_text="250 words or less ", blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
    
-    last_login = models.DateTimeField(default=timezone.now())
-    posts_count = models.IntegerField("how many posts", null=True)
+    last_login = models.DateTimeField(blank=True, default=date.today)
+    posts_count = models.IntegerField("how many posts", blank=True, null=True)
 
     def __str__(self):
         return self.username

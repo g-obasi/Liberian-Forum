@@ -16,10 +16,13 @@ class SignUpForm(UserCreationForm):
 
 # form to update the user profile
 class UserInfoUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
+    email = forms.EmailField(required=False)
+    profile_pic = forms.ImageField(required=False)
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email',
+        fields = ('first_name', 'last_name',
                   'date_of_birth', 'gender', 'profile_pic', 'bio', 'location')
-        widgets = {'date-of_birth': forms.DateInput(attrs={'type': 'date'})}
+        widgets = {'date_of_birth': forms.DateInput(attrs={'type': 'date'})}
+
+
