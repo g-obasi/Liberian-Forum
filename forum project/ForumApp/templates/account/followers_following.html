@@ -3,11 +3,11 @@
 {% block content %}
 <table summary="" id="up">
     <a name="top"></a>
-<h2>Followers</h2>
+<h2>Followers and Followings</h2>
 <p><a href="{% url 'home' %}">Liberty Forum</a> / <a
-        href="#top">Followers</a></p>
+        href="#top">Followers and Followings</a></p>
 <p></p>
-{% for follower in user_followers %}
+{% for follower in followers %}
 <table>
     <tbody>
         <tr>
@@ -22,10 +22,16 @@
             </tr>
   
 {% endfor %}
-    <br />
-    <br />
 
-{% for following in user_followings %}
+</tbody>
+</table>
+<br />
+<br />
+
+
+<table>
+<tbody>
+{% for following in followings %}
 
     <tr>
         <td><a href="{% url 'profile_view' following.username %}">{{following.username}}</a>
@@ -44,7 +50,4 @@
 
     </tbody>
 </table>
-<p class="small">(<a href="#top"><b>Go Up</b></a>)</p>
-<p></p>
-<br>
 {% endblock content %}

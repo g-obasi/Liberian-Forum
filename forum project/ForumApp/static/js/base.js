@@ -2,56 +2,53 @@
 
 function setState(state, id)
 {
-	$(id).attr("state").value(state);
+	$(id).attr("state", state);
 }
 
-// $('#postlike').click(function (e) {
-// 	// Change based on state
-// 	var likescounttext = ' Like';
-// 	var likescount = $("likescount").value();
-// 	var text = (state == false) ? " Like" : " Unlike";
-// 	var likes_count_state = (state == false) ? likescount - 1 : likescount + 1;
-// 	var liketext = (likescount > 1) ? likescounttext + 's' : likescounttext;
-
-// 	$("#likescount").html(likes_count_state);
-// 	$("#liketext").html('' + liketext);
-// 	$("#postlike").html('' + text);
-// 	(state == false) ? setState(false, '#postlike'): setState(true, '#postlike');
-
-
-// 	$.ajax({
-
-// 		url: $(this).attr("href"),
-// 		success: function (dat) {
-// 			console.log(typeof dat);
-// 		},
-
-// 		error: function (error) {
-// 			console.log(error.responseText);
-// 		},
-// 	});
-
-// });
-
-
-function likeUnlikePost(obj, state, post_id) {
-	var likescounttext = ' Like';
-	var likescount = $("likescount").value();
-	var text = (state == false) ? " Like" : " Unlike";
-	var likes_count_state = (state == false) ? likescount - 1 : likescount + 1;
-	var liketext = (likescount > 1) ? likescounttext + 's' : likescounttext;
-
-	$("#likescount").html(likes_count_state);
-	$("#liketext").html('' + liketext);
-	$("#postlike").html('' + text);
-	(state == false) ? setState(false, '#postlike') : setState(true, '#postlike');
+function delete_post(obj, post_id){
 
 
 	$.ajax({
 
-		url: $(this).attr("href"),
+		url: $(obj).attr("url"),
 		success: function (dat) {
-			console.log(typeof dat);
+			console.log(dat);
+			// $('#')
+		},
+
+		error: function (error) {
+			console.log(error.responseText);
+		},
+	});
+
+
+}
+
+
+function likeUnlikePost(obj, state, post_id) {
+	var likescounttext = ' Like';
+	var likescount = (isNaN(parseInt($("#likescount-"+ post_id).html()))) ? 0 : parseInt($("#likescount-"+ post_id).html())
+	console.log('likescount - ' + likescount)
+	var text = (state == false) ? "Unlike" : "Like";
+	var likes_count_state = (state == false) ? likescount + 1 : --likescount;
+	var liketext = (likes_count_state > 1) ? likescounttext + 's' : ((likes_count_state == 1) ? likescounttext : '');
+
+
+	(likes_count_state === 0) ? $("#likescount-"+ post_id).html('') : $("#likescount-"+ post_id).html(likes_count_state) ;
+
+	// $("#likescount").html(likes_count_state)
+	$("#liketext-"+ post_id).html('' + liketext);
+	$("#postlike-"+ post_id).html('' + text);
+
+	(state == false) ?  $("#postlike-"+post_id).attr('onclick', "likeUnlikePost(this,true,"+post_id+")"): $("#postlike-"+ post_id).attr('onclick',"likeUnlikePost(this,false,"+post_id+")");
+
+
+	$.ajax({
+
+		url: $(obj).attr("url"),
+		data:post_id,
+		success: function (dat) {
+			console.log(dat);
 		},
 
 		error: function (error) {
@@ -64,31 +61,34 @@ function likeUnlikePost(obj, state, post_id) {
 function shareUnsharePost(obj, state, post_id) {
 
 	var sharescounttext = ' Share';
-	var sharescount = $("sharescount").value();
-	var text = (state == false) ? " Share" : " Un-Share";
-	var shares_count_state = (state == false) ? sharescount - 1 : sharescount + 1;
-	var sharetext = (sharescount > 1) ? sharescounttext + 's' : sharescounttext;
+	var sharescount = (isNaN(parseInt($("#sharescount-"+ post_id).html()))) ? 0 : parseInt($("#sharescount-"+post_id).html());
+	var text = (state == false) ? "Un-Share" : "Share";
+	var shares_count_state = (state == false) ? sharescount + 1 : sharescount - 1;
+	var sharetext = (shares_count_state > 1) ? sharescounttext + 's' : (shares_count_state == 1 ? sharescounttext : '');
 
-	$("#sharescount").html(shares_count_state);
-	$("#sharetext").html('' + sharetext);
-	$("#postshare").html('' + text);
+	console.log('share count - '+shares_count_state);
+
+	(shares_count_state === 0) ? $("#sharescount-"+ post_id).html('') : $("#sharescount-"+ post_id).html(shares_count_state);
+
+	// $("#sharescount").html(shares_count_state);
+	$("#sharetext-"+ post_id).html('' + sharetext);
+	$("#postshare-"+ post_id).html('' + text);
 
 	//  if state is false 
-	(state == false) ? setState(false, '#postshare') : setState(true, '#postshare');
+
+	(state == false) ?  $("#postshare-"+ post_id).attr('onclick', "shareUnsharePost(this,true,"+post_id+")"): $("#postshare-"+ post_id).attr('onclick',"shareUnsharePost(this,false,"+post_id+")");
 
 	$.ajax({
 
-		url: $(this).attr("href"),
+		url: $(obj).attr("url"),
 		success: function (dat) {
-
-			console.log(typeof dat);
+			console.log(dat);
 		},
 
 		error: function (error) {
 			console.log(error.responseText);
 		},
 	});
-
 
 }
 
@@ -124,24 +124,23 @@ function shareUnsharePost(obj, state, post_id) {
 // });
 
 // Follow Topic or Board
-function followUnfollowTopic(obj, state, topic_id) {
-	url = $(obj).attr("href");
+function follow_topic(obj, state, topic_id) {
+	url = $(obj).attr("url");
 
 	// Add the .val() to get the value and change based on that state
 
-	var follow_text = (state == false) ? " Follow" : " Unfollow";
-	$(this).html(text);
-	$("#topicfollow").html(follow_text);
-	(state == false) ? setState(false, '#topicfollow'): setState(true, '#topicfollow');
+	var text = (state == false) ? "Unfollow" : "Follow";
+
+	$("#topicfollow, #topicfollow1").html(text);
+
+	(state == false) ? $("#topicfollow, #topicfollow1").attr('onclick', "follow_topic(this, true,"+topic_id+")"): $("#topicfollow, #topicfollow1").attr('onclick',"follow_topic(this,false,"+topic_id+")");
 
 	$.ajax({
-
 		url: url,
 		data:topic_id,
 		success: function (dat) {
-			console.log(typeof dat);
+			console.log(dat);
 		},
-
 		error: function (error) {
 			console.log(error.responseText);
 		},
@@ -149,25 +148,28 @@ function followUnfollowTopic(obj, state, topic_id) {
 
 }
 
-function followBoard(obj, state, board_id) {
-	url = $(obj).attr("href");
+// document.getElementById("boardfollow").addEventListener("click", follow_board, false);
+
+// function follow_board1() {alert('hello world!')}
+
+function follow_board(obj, state, board_id) {
+	// alert('hello world');
+	url = $(obj).attr("url");
 
 	// Add the .val() to get the value and change based on that state
+	var text = (state == false) ? "Unfollow" : "Follow";
 
-	var text = (state == false) ? " Follow" : " Unfollow";
-	$(this).html(text);
-	$("#boardfollow").html(text);
-	(state == false) ? setState(false, '#boardfollow'): setState(true, '#boardfollow');
+	$("#boardfollow, #boardfollow1").html(text);
 
+	(state == false) ?  $("#boardfollow, #boardfollow1").attr('onclick', "follow_board(this,true,"+board_id+")"): $("#boardfollow, #boardfollow1").attr('onclick',"follow_board(this,false,"+board_id+")");
+
+		
 	$.ajax({
-
 		url: url,
 		data:board_id,
 		success: function (dat) {
-
-			console.log(typeof dat);
+			console.log(dat);
 		},
-
 		error: function (error) {
 			console.log(error.responseText);
 		},

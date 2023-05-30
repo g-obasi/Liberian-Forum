@@ -1,8 +1,9 @@
 {% extends 'forum/base.html' %}
+{% load forum_tags %}
 {% load static %}
 {% block content %}
 
-<a name="top"></a><h2>My Topics</h2><a href="{% url 'home' %}">Liberty Forum</a> / <a href="{% url 'profileView' topic.created_by %}">My Profile</a> / <a href="{% url 'my_topic' %}">My Topics</a>
+<a name="top"></a><h2>My Topics</h2><a href="{% url 'home' %}">Liberty Forum</a> / <a href="{% url 'profile_view' user %}">My Profile</a> / <a href="{% url 'view_topics' user %}">My Topics</a>
 
 <!-- Ads -->
 
@@ -24,17 +25,17 @@
         {% if page_obj.has_next %}
         <a href="?page={{page_obj.next_page_number}}">Next</a>
         {% endif %}
-        (of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize 's'}})
+        (of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize:'s'}})
 {% endif %}
 </p>
 <p></p>
 
 <table><tbody>
     
- {% for topics in my_topics   %}
+ {% for topic in my_topics   %}
 
-    <tr><td id="" class="w"><a name=""></a> <img src="{% static 'img/normal_post.gif' %}"> <b><a href="">{{topic.board.name}}</a></b> / <b><a href="">{{topic.title}}</a> </b><br><span class="s">by <b><a
-                        href="{% url 'profileView' topic.created_by %}" class="user" title="Location: {{topic.created_by.location}}">{{topic.created_by}}</a></b>. <b>{{topic_post_count}}</b> post {{topic_post_count|pluralize 's'}} <b>{{topic.views}}</b> view{{topic.views|pluralize 's'}}. <b>{{ topic.date_created|date:"h:i a"}}</b>
+    <tr><td id="" class="w"><a name=""></a> <img src="{% static 'img/icons/normal_post.gif' %}"> <b><a href="">{{topic.board.name}}</a></b> / <b><a href="">{{topic.title}}</a> </b><br><span class="s">by <b><a
+                        href="{% url 'profile_view' topic.created_by %}" class="user" title="Location: {{topic.created_by.location}}">{{topic.created_by}}</a></b>. <b>{{topic_post_count}}</b> post {{topic_post_count|pluralize:'s'}} <b>{{topic.views}}</b> view{{topic.views|pluralize:'s'}}. <b>{{ topic.date_created|date:"h:i a"}}</b>
                         On
                         <b>{{topic.date_created|date:"jS b"}}</b> </span></td>
     </tr>

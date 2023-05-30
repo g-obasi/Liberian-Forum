@@ -1,12 +1,13 @@
 {% extends 'forum/base.html' %}
+{% load static %}
+
 {% load forum_tags %}
+
 {% block content %}
 
 <a name="top"></a>
-<h2>My Posts</h2>
-
-<p>
-{% if page_obj %}
+<h2>My Shared Posts</h2>
+<p> {% if page_obj %}
         {% if page_obj.has_previous %}
         <a href="?page={{page_obj.previous_page_number}}">Prev</a> 
         {% endif %}
@@ -23,24 +24,24 @@
         {% if page_obj.has_next %}
         <a href="?page={{page_obj.next_page_number}}">Next</a>
         {% endif %}
-        (of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize:'s'}})
-{% endif %}
-</p>
-
+        (of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize}})
+{% endif %}</p>
 <table>
     <tbody>
-{% for post in my_posts   %}
-<tr>
-    <td class="bold l pu"><a href="#top">{% if not forloop.first %}Re:{% endif %} {{topic.title}} </a> by <a
-            href="{% url 'profile_view' post.created_by %}" class="user"
-            title="Location: {{topic.created_by.location}}">{{post.created_by}}</a>(<span
-            class="m">{{post.created_by.get_gender_display}}</span>): <span
-            class="s"><b>{{ post.date_created|date:"h:i a"}}</b>
-            On
-            <b>{{post.date_created|date:"jS b"}}</b></span></td>
-</tr>
-            <!--POST BODY OR CONTENT-->
-           <!--POST BODY OR CONTENT-->
+{% for post in my_shares   %}
+            <!-- POST TITLE -->
+        <tr>
+            <td class="bold l pu"><a href="#top">{% if not forloop.first %}Re:{% endif %} {{topic.title}} </a> by <a
+                    href="{% url 'profile_view' post.created_by %}" class="user"
+                    title="Location: {{topic.created_by.location}}">{{post.created_by}}</a>(<span
+                    class="m">{{post.created_by.get_gender_display}}</span>): <span
+                    class="s"><b>{{ post.date_created|date:"h:i a"}}</b>
+                    On
+                    <b>{{post.date_created|date:"jS b"}}</b></span></td>
+        </tr>
+<!-- END OF POST TITLE -->
+
+<!--POST BODY OR CONTENT-->
 
         <tr>
             <td class="l w pd">
@@ -104,25 +105,21 @@
                    {% endwith %}
 
 
-               <!-- {{post.post_attachments.image.path}}  -->
-        {% if post.post_attachments.all %}
-            {% for image in post.post_attachments.all %}
-            <p> <img style="max-width:700px;" class="attachmentimage img" src="/media/{{image.image.name}}" /> </p>
-            {% endfor %}
-        {% endif %}
-
-            </td>
-        </tr>
-        <!-- END OF POST BODY OR CONTENT -->
+                    
+                    </p>
+                    {% if post.post_attachments.all %}
+                        {% for image in post.post_attachments.all %}
+                    <p> <img style="max-width:700px;" class="attachmentimage img" src="/media/{{image.image.name}}" /> </p>
+                        {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
            
             {% empty %}
                 <tr>
-                    <td>You have not posted yet as soon as you do they'll show up here</td>
+                    <td>You have no liked and shared post at this time</td>
                 </tr>
     {% endfor %}
-
-    </tbody>
-</table>
-      
-
+            </tbody>    
+        </table>
 {% endblock content %}

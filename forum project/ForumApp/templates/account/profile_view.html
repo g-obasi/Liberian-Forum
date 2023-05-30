@@ -10,19 +10,18 @@
       <table>
         <tbody>
           <tr>
-            <th>{{user.username}}'s Latest Topics ( <a href="{% url 'view_topics' user.username %}">View All {{topics_count}} Topic{{topics_count|pluralize:'s'}}</a> | <a
+            <th>{{user.username}}'s Latest Topics ( <a href="{% url 'view_topics' user.username %}">View All {{topics_count}} Topic{{topics_count|pluralize}}</a> | <a
                 href="{% url 'view_posts' user.username %}">Posts</a> )</th>
           </tr>
         {% for topic in topics %}
           <tr>
             <td id="" class="w"><a name="6537866"></a> <img
-                src="./normal_post.gif"> <b><a
-                  href="{% url 'section' section %}">{{topic.board.name}}</a></b> / <b><a
-                  href="{% url 'topic' id %}">{{topic.title}}</a> </b> <a href="https://www.nairaland.com/6537866/8-lions-indian-zoo-test/1">(2)</a> <a
-                href="https://www.nairaland.com/6537866/8-lions-indian-zoo-test/2">(3)</a> <img
-                src="./{{user.username}}&#39;s Profile_files/new.gif"> <b>*</b> <br><span class="s">by <b><a
-                    href="https://www.nairaland.com/{{user.username}}">{{user.username}}</a></b>. <b>70</b> posts &amp; <b>17463</b> views.
-                <b>6:54am</b> (<b><a href="https://www.nairaland.com/sayisayi">sayisayi</a></b>)</span></td>
+                src="/static/img/icons/normal_post.gif"> <b><a
+                  href="{% url 'section' topic.board.name %}">{{topic.board.name}}</a></b> / <b><a
+                  href="{% url 'thread_post_list' topic.slug topic.id %}">{{topic.title}}</a> </b> <img
+                src="/static/img/icons/new.gif"> <b>*</b> <br><span class="s">by <b><a
+                    href="">{{user.username}}</a></b>. <b>{{topic.topic_posts.count}}</b> post{{topic.topic_posts.count|pluralize}} &amp; <b>{{topic.views}}</b> view{{topic.views|pluralize}}.
+                <b>{{topic.date_created}}</b> </span></td>
           </tr>
           {% endfor %}
           
@@ -37,38 +36,35 @@
           <tr>
             <td>(<a class="unft"
                 onclick=";"
-                href="">Follow
-                This Member</a>)<p><a href="https://www.nairaland.com/sendemail/{{user.username}}"> Send E-Mail Message To
-                  {{user.username}}</a></p>
-              <p><img class="img" src="./{{user.username}}&#39;s Profile_files/ap42ktu6z1rjl9ud4iqxsgpe5vm8ek60529204"></p>
-              <p><b>Time uploaded:</b> <b>5:44am</b> On <b>Feb 01</b></p>
-              <p class="s"><b id="avt529204">20 Likes</b> &amp; <b>370 Old Likes</b> (<a id="avl529204"
+                href="">Follow {{user.username}}</a>)   
+              <p><img class="img" width="300px" src="{{user.profile_pic.url}}"></p>
+              <!-- <p class="s"><b id="avt529204">20 Likes</b> &amp; <b>370 Old Likes</b> (<a id=""
                   onclick=""
                   href="">Like</a>)
-              </p>
-              <p><b>Bio</b>: NEVER</p>
-              <p><b>Location</b>: NEVER</p>
-              <p><b>Facebook</b>: NEVER</p>
-              <p><b>Twitter</b>: NEVER</p>
-              <p><b>Instagram</b>: NEVER</p></p>
-              <p><b>Time registered</b>: May 13, 2010</p>
+              </p> -->
+              <p><b>Bio</b>: {{user.bio}}</p>
+              <p><b>Location</b>: {{user.location}}</p>
+              <!-- <p><b>Facebook</b>: </p>
+              <p><b>Twitter</b>: NEVER</p> -->
+              <!-- <p><b>Instagram</b>: NEVER</p></p> -->
+              <p><b>Time registered</b>: {{user.date_joined}}</p>
               
               </p>
-              <p><b>Last seen</b>: <b>10:04am</b></p>
-              <p><a href="https://www.nairaland.com/{{user.username}}/posts">View {{user.username}}'s posts (120198)</a> | <a
-                  href="https://www.nairaland.com/{{user.username}}/topics">View {{user.username}}'s topics (176)</a></p>
-              <p><b>Moderates:</b> <a href="https://www.nairaland.com/crime">Crime</a>, <a
+              <p><b>Last seen</b>: <b>{{user.last_login}}</b></p>
+              <p><a href="{% url 'view_posts' user  %}">View {{user.username}}'s posts ({{ posts_count }})</a> | <a
+                  href="{% url 'view_topics' user  %}">View {{user.username}}'s topics ({{ topics_count }})</a></p>
+              <!-- <p><b>Moderates:</b> <a href="https://www.nairaland.com/crime">Crime</a>, <a
                   href="https://www.nairaland.com/politics">Politics</a>, <a
                   href="https://www.nairaland.com/diaries">Diaries</a>, <a
                   href="https://www.nairaland.com/racism-tribalism">Ethnic, Racial, Or Sectarian Politics</a>, <a
-                  href="https://www.nairaland.com/ads">Nairaland Ads</a></p>
-              <p><b>Section Most Active In: </b><a href="https://www.nairaland.com/politics">Politics</a></p>
-            </td>
+                  href="https://www.nairaland.com/ads">Nairaland Ads</a></p> -->
+              <!-- <p><b>Section Most Active In: </b><a href="https://www.nairaland.com/politics">Politics</a></p>
+            </td> -->
           </tr>
         </tbody>
       </table>
       <p></p>
-      <table summary="friends">
+      <!-- <table summary="friends">
         <tbody>
           <tr>
             <th>Following (2):</th>
@@ -78,8 +74,7 @@
                 href="https://www.nairaland.com/ujsizzle">UjSizzle</a>(<span class="f">f</span>)</td>
           </tr>
         </tbody>
-      </table>
-      <p class="small">(<a href="#up"><b>Go Up</b></a>)</p>
+      </table> -->
 
 
   {% endblock content %}

@@ -3,7 +3,7 @@
 
 <a name="top"></a>
 <h2>My Shared Posts</h2>
-<p> {% if page_obj %}
+<p> {% if is_paginated %}
         {% if page_obj.has_previous %}
         <a href="?page={{page_obj.previous_page_number}}">Prev</a> 
         {% endif %}
@@ -22,58 +22,61 @@
         {% endif %}
         (of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize 's'}})
 {% endif %}</p>
-<table>
-    <tbody>
-{% for post in shared_posts   %}
+
+ 
+        
+            <!-- POST TITLE -->
+ {% for post in my_shares   %}
             <tr>
-                <td class="bold l pu" id="{{post.topic.id}}"><a href="#top">Re: {{reply.post.title}} </a> by <a
-                        href="{% url 'profileView' post.created_by %}" class="user"
+                <td class="bold l pu"><a href="#top">Re: {{post.title}} </a> by <a
+                        href="{% url 'profile_view' post.created_by %}" class="user"
                         title="Location: {{title.created_by.location}}">{{post.created_by}}</a>(<span
-                        class="m">{{title.created_by.gender}}</span>): <span class="s"><b>{{ reply.date_created|date:"h:i a"}}</b>
+                        class="m">{{post.topic.created_by.gender}}</span>): <span
+                        class="s"><b>{{ reply.date_created|date:"h:i a"}}</b>
                         On
                         <b>{{reply.date_created|date:"jS b"}}</b></span></td>
-            
-            
+        
+        
             </tr>
+        
             <!--POST BODY OR CONTENT-->
-            
-            <tr>
-                <td class="l w pd" id="{{post.id}}">
-                    <div class="narrow">
-                        <p> {{topic.message}} </p>
-                    </div>
-            
-                    <p class="s"> (<a href="{% url 'quote_post' post.id %}">Quote</a>)
-                    
-                        (<a href=" {% url 'report_post' post.id %}">Report</a>)
-                    
-                        <span class='s' id='likescount' style='font-weight:bold;'>{{post.totalikescount}}
-                            Like{{post.totalikescount|pluralize:'s'}}</span> <span class='s' id='liketext'
-                            style='font-weight:bold;'>Like{{post.totalikescount|pluralize:'s'}}
-                        </span> (<a id='postlike' state="{{state}}" href="{% url 'post_like' post.id  %}">{{like_state}}
-                        </a>)
-                    
-                        <span class='s' id='sharescount' style='font-weight:bold;'>{{post.totalsharescount}}
-                        </span><span class='s' id='sharetext' style='font-weight:bold;'>Share{{post.totalsharescount|pluralize:'s'}}
-                        </span> (<a id='postshare' state="{{state}}" href="{% url 'post_share' post.id  %}">{{share_state}}
-                        </a>)
-                    
-                    </p>
-                    {% if post.attachment.image as post_images %}
-                     {% for image in post_images %}
+         <tr>
+     <td class="l w pd" id="{{post.id}}">
+        <div class="narrow">
+        <p> {{topic.message}} </p>
+        </div>
+
+<p class="s"> (<a href="{% url 'quote_post' post.id %}">Quote</a>)
+
+    (<a href="{% url 'report_post' post.id %}">Report</a>)
+
+    <span class='s' id='likescount' style='font-weight:bold;'>{{post.totalikescount}}
+        Like{{post.totalikescount|pluralize:'s'}}</span> <span class='s' id='liketext'
+        style='font-weight:bold;'>Like{{post.totalikescount|pluralize:'s'}}
+    </span> (<a id='postlike' state="{{state}}" href="{% url 'post_like' post.id  %}">{{like_state}}
+    </a>)
+
+    <span class='s' id='sharescount' style='font-weight:bold;'>{{post.totalsharescount}}
+    </span><span class='s' id='sharetext' style='font-weight:bold;'>Share{{post.totalsharescount|pluralize:'s'}}
+    </span> (<a id='postshare' state="{{state}}" href="{% url 'post_share' post.id  %}">{{share_state}}
+    </a>)
+
+</p>
+
+             {% if post.attachment.images as post_image %}
+                    {% for image in post_images %}
                     <p> <img style="max-width:700px;" class="attachmentimage img" src="{{image.url}}" /> an Image </p>
-                     {% endfor  %}
-            
-                    {% endif %}
-            
+                    {% endfor  %}
+            {% endif %}
+        
                 </td>
             </tr>
-           
-            {% empty %}
-                <tr>
-                    <td>You have no shared post at this time</td>
-                </tr>
-    {% endfor %}
-    
+       
+    {% empty %}
+        <tr>
+            <td>You have no liked post at this time</td>
+        </tr>
+
+{% endfor %}
 
 {% endblock content %}

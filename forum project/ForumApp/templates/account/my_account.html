@@ -10,16 +10,18 @@
 <table>
 <tbody>
 <tr>
-<th>My Latest Topics (<a href="{% url 'view_topics' user %}">View All {{topic_count}} Topic{{topic_count|'s'}}</a>| <a href="{% url 'view_topics' user %}">Posts </a> )</th>
+<th>My Latest Topics (<a href="{% url 'view_topics' user %}">View All {{topic_count}} Topic{{topic_count|pluralize:'s'}}</a>| <a href="{% url 'view_topics' user %}">Posts </a>)</th>
 </tr>
+
+{% for post in posts %}
 <tr>
 <td id="" class="w"></a>
-    {% for post in posts %}
-            <img src="{% static 'img/icons/normal_post.gif' %}"> <b><a href="{% url 'section' {{post.topic. board}} %}">{{post.section}}</a></b> / 
-            <b><a href="{% url 'view_posts' user %}">{{post.title}}</a> </b><br><span class="s">by <b><a href="#top">{{user}}</a>
-            </b>. <b>  {{posts_count}} </b> post {{post.topic.posts_count|pluralize:'s'}} &amp; <b>{{post.topic.views}}</b> views. <b>{{post.date_created|date:"h:i a"}}</b> On <b>{{post.date_created|date:"jS b"}}</b> 
+    
+            <img src="{% static 'img/icons/normal_post.gif' %}"> <b><a href="{% url 'section' post.topic.board %}">{{post.topic.board.name}}</a></b> / 
+            <b><a href="{% url 'view_posts' user %}">{{post.topic.title}}</a> </b><br />
+            <span class="s">by <b><a href="#top">{{user}}.</a>
+            </b> <b>  {{posts_count}} </b> post{{posts_count|pluralize}} &amp; <b>{{post.topic.views}}</b> view{{post.topic.views|pluralize}} . <b>{{post.date_created|date:"h:i a"}}</b> On <b>{{post.date_created|date:"jS b"}}</b> 
             </span> </td> </tr>
-
         {% empty %}<h3>No post yet</h3>
     {% endfor %}
 
@@ -27,14 +29,15 @@
     </tbody>
     </table>
     <p></p>
-
-    <table><tbody><tr><td><a href="{% url 'my_likes' user  %}"> Posts I've Liked</a> | <a href="{% url 'my_shares' user  %}"> Posts I've Shared</a> | <a href="{url 'search' user.username }">My Quotes &amp; Mentions</a>
+    <!-- <a href=""> Posts I've Liked</a> | <a> Posts I've Shared</a> -->
+    <table><tbody><tr><td> <a href="{url 'search' user.username }">My Quotes &amp; Mentions</a>
    
     {% comment %}<!-- <p><a href="https://www.nairaland.com/sendemail/greenfield1"> Send E-Mail Message To Greenfield1</a></p>--> {% endcomment %}
     <!-- <p><b>Time registered</b>: {{user.date_joined}}</p><p><b>Time spent online</b>: 13 hours &amp; 9 minutes</p> -->
     <p><b>Last seen</b>: <b>{{user.last_login}}</b></p>
-    <p><a href="{% url 'view_posts' user  %}">View My Posts({{ post_count }}) </a> | <a href="{% url 'view_topics' user  %}">View My topics ( {{topics_count}} )</a></p>
+    <p><a href="{% url 'view_posts' user  %}">View My Posts({{ posts_count }}) </a> | <a href="{% url 'view_topics' user  %}">View My topics ({{topics_count}})</a></p>
     <p></p>
+    </td></tr>
     </tbody></table>
 
   
