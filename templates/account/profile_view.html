@@ -1,0 +1,80 @@
+{% extends 'forum/base.html' %}
+
+{% block content %}
+
+<a name="top"></a>
+      <h2>{{user.username}}'s Profile</h2>
+      <p> <a href="/">Liberty Forum</a> / <a href="{% url 'profile_view' user.username %}">{{user.username}}'s
+          Profile</a></p>
+      <p> </p>
+      <table>
+        <tbody>
+          <tr>
+            <th>{{user.username}}'s Latest Topics ( <a href="{% url 'view_topics' user.username %}">View All {{topics_count}} Topic{{topics_count|pluralize}}</a> | <a
+                href="{% url 'view_posts' user.username %}">Posts</a> )</th>
+          </tr>
+        {% for topic in topics %}
+          <tr>
+            <td id="" class="w"><a name="6537866"></a> <img
+                src="/static/img/icons/normal_post.gif"> <b><a
+                  href="{% url 'section' topic.board.name %}">{{topic.board.name}}</a></b> / <b><a
+                  href="{% url 'thread_post_list' topic.slug topic.id %}">{{topic.title}}</a> </b> <img
+                src="/static/img/icons/new.gif"> <b>*</b> <br><span class="s">by <b><a
+                    href="">{{user.username}}</a></b>. <b>{{topic.topic_posts.count}}</b> post{{topic.topic_posts.count|pluralize}} &amp; <b>{{topic.views}}</b> view{{topic.views|pluralize}}.
+                <b>{{topic.date_created}}</b> </span></td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
+      <p></p>
+
+
+
+      <table>
+        <tbody>
+          <tr>
+            <td>(<a class="unft"
+                onclick=";"
+                href="">Follow {{user.username}}</a>)   
+              <p><img class="img" width="300px" src="{{user.profile_pic.url}}"></p>
+              <!-- <p class="s"><b id="avt529204">20 Likes</b> &amp; <b>370 Old Likes</b> (<a id=""
+                  onclick=""
+                  href="">Like</a>)
+              </p> -->
+              <p><b>Bio</b>: {{user.bio}}</p>
+              <p><b>Location</b>: {{user.location}}</p>
+              <!-- <p><b>Facebook</b>: </p>
+              <p><b>Twitter</b>: NEVER</p> -->
+              <!-- <p><b>Instagram</b>: NEVER</p></p> -->
+              <p><b>Time registered</b>: {{user.date_joined}}</p>
+              
+              </p>
+              <p><b>Last seen</b>: <b>{{user.last_login}}</b></p>
+              <p><a href="{% url 'view_posts' user  %}">View {{user.username}}'s posts ({{ posts_count }})</a> | <a
+                  href="{% url 'view_topics' user  %}">View {{user.username}}'s topics ({{ topics_count }})</a></p>
+              <!-- <p><b>Moderates:</b> <a href="https://www.nairaland.com/crime">Crime</a>, <a
+                  href="https://www.nairaland.com/politics">Politics</a>, <a
+                  href="https://www.nairaland.com/diaries">Diaries</a>, <a
+                  href="https://www.nairaland.com/racism-tribalism">Ethnic, Racial, Or Sectarian Politics</a>, <a
+                  href="https://www.nairaland.com/ads">Nairaland Ads</a></p> -->
+              <!-- <p><b>Section Most Active In: </b><a href="https://www.nairaland.com/politics">Politics</a></p>
+            </td> -->
+          </tr>
+        </tbody>
+      </table>
+      <p></p>
+      <!-- <table summary="friends">
+        <tbody>
+          <tr>
+            <th>Following (2):</th>
+          </tr>
+          <tr>
+            <td class="user w"><a href="https://www.nairaland.com/presidency">presidency</a>, <a
+                href="https://www.nairaland.com/ujsizzle">UjSizzle</a>(<span class="f">f</span>)</td>
+          </tr>
+        </tbody>
+      </table> -->
+
+
+  {% endblock content %}

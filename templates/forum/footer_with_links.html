@@ -1,0 +1,32 @@
+<table id="down">
+    <tbody>
+        <tr>
+            <td class="small w grad">
+                <p></p>
+                <form action="{% url 'search' %}">
+                    <input type="text" name="q" size="32">
+                    <input type="submit" name="search" value="Search">
+                </form>Sections: 
+                {% for board in  board_list %}
+                <a href="{% url  'section' '{{board.name}}' %}">{{board.name}}</a>
+                {% endfor %}
+
+                <p>Links: 
+                {% for i in '0123456789 '%}
+                    <a href="{% url 'news'  %}?page={{forloop.counter}}"
+                        title="Page {{ forloop.counter }}, Nairaland News ">({{ forloop.counter }})</a>
+                {% endfor %}
+                </p>
+
+                <p>
+                    <b><a href="{% url 'home' %}" title="Liberian Forum">Liberty Forum</a></b>
+                    - Copyright © 2021 <a href="{% url 'home' %}"
+                        title="Liberian forum">Home page</a>. All rights reserved.
+
+                    14<br><b>Disclaimer</b>: Every Forum member is <b>solely responsible</b> for
+                    <b>anything</b> that he/she <b>posts</b> or <b>uploads</b> on the forum.
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>

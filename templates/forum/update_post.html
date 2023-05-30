@@ -1,0 +1,44 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<table summary="posting form"><tr><td class="l">    {% include 'posting_rules.html' %}
+
+
+<form method=POST  id="postform" name="postform" enctype="multipart/form-data">
+{% csrf_token %} 
+
+{{form.non_field_errors }}
+
+{% for hidden_field in form.hidden_fields %}
+    {{hidden_field.errors}}
+    {{hidden_field}}
+{% endfor %}
+
+{# {% include 'editor.html' %} #}
+
+<br />
+<h3><b>Update Post</b></h3>
+
+<p><b>Message</b>:</p>
+
+{{form.message}}
+
+        <br />
+        <div id = "attachments" class="clearfix">
+        <b>Attachments</b>: (maximum size: <b>5MB</b> for pictures )<br>
+        {{form.file}}
+        </div>
+        <input type="submit" style="margin-top:5px;" value="Update">
+ </form>
+
+ </td>
+</tr>
+</table>
+
+
+      </div>
+      </table>
+
+{% endblock content %}

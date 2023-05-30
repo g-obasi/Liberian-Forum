@@ -1,0 +1,107 @@
+{% load static %}
+{% load forum_tags %}
+<!DOCTYPE html>
+
+<!--Homepage-->
+<html>
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css"> -->
+        <link href="{% static 'css/12345.css' %}" rel="stylesheet" type="text/css">
+
+        <link rel="preconnect" href="https://fonts.gstatic.com/">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap"
+            rel="stylesheet">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="{% url 'feed' %}" rel="alternate" type="application/rss+xml" title="Liberian Forum Feed">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap"
+            rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Buenard:wght@400;700&family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap"
+            rel="stylesheet">
+        <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+            integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous">
+        </script>
+
+        {% block meta %}
+        <title>Liberian Forum Home</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="shortcut icon" href="favicon.png">
+        {% endblock meta %}
+
+    </head>
+
+    <body>
+        <div class="body" style="height: auto !important;">
+            <table summary="" id="up">
+                <tbody>
+                    <tr>
+                        <td class="grad">
+                            <h1><a href="{% url 'home' %}" class="g" title="Libera-land, the Liberian Forum"><img
+                                        src="{% static 'img/logo1.png' %}" width="246" height="24"></a>
+                            </h1> Welcome, <b>
+                                {% if not user.is_authenticated %}
+                                <b>Guest</b>
+                                : <a href="{% url 'signup' %}"> Join Libertyland</a> / <b>
+                                    <a href="{% url 'login' %}">LOGIN!</a>
+                                    {% elif user.is_authenticated %}
+                                    <a href="{% url 'profile_view' request.user.username %}" class="user">
+                                        {{request.user.username}}</a>:
+                                    <a href="{% url 'update_account' user.pk %}">Edit Profile</a> / <a
+                                        href="{% url 'shared_with_me' %}"><span
+                                            title="Posts Shared With Me">SH</span></a> / <a
+                                        href="{% url 'followed_topics' %}"><span title="Followed Topics">FT</span></a> /
+                                    <a href="{% url 'followed_boards' %}"><span title="Followed Boards">FB</span></a> /
+                                    <a href="{% url 'likes_and_shares' %}"><span
+                                            title="My Likes & Shares">L&amp;S</span></a> / <a
+                                        href="{% url 'mentions' %}"><span title="Mentions">MT</span></a> / <a
+                                        href="{% url 'followers' request.user.username  %}"><span
+                                            title="Followers">FS</span></a>
+
+                                </b>
+                                {% endif %}
+
+                                / <a href=" {% url 'trending' %}">Trending</a> /
+                                <a href=" {% url 'recent' %}">Recent</a> /
+                                <a href=" {% url 'new' %}">New</a><br><b>Stats: </b>({{users_count}}
+                                member{{users_count|pluralize:'s'}}), ({{topics_count}}
+                                topic{{topics_count|pluralize:'s'}}). <b>Date</b>: {% now "D, M jS Y" %}
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'logout' %}"><span title="Logout">LOGOUT</span></a>
+                                {% endif %}<p>
+                                </p>
+                                <form action="<a {% url 'search' %}"> <input type="text" name="q" size="32">
+                                    <input type="submit" name="search" value="Search">
+                                </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            {% block section %}
+            {% endblock section %}
+
+            {% block content %}
+            {% endblock content %}
+
+            <p class="small">(<a href="#up"><b>Go Up</b></a>)</p>
+            <p></p>
+
+    {% if home %}
+    {% include 'footer_without_links.html' %}
+    {% else %}
+    {% include 'footer_with_links.html' %}
+    {% endif %}
+        </div>
+    </body>
+
+
+    <script src="{% static 'js/base.js' %}" defer></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+
+</html>

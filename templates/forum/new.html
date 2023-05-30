@@ -1,0 +1,26 @@
+{% extends 'forum/base.html' %}
+{% load forum_tags %}
+{% load static %}
+
+{% block content %}
+
+<a name="top">
+</a><h2>New topic</h2><p><a href="{% url 'home' %}">Liberian Forum</a> / <a href="{% url 'new' %}"> New Topics </a></p>
+
+
+<br />
+<br />
+
+<table summary="links"><tbody><tr><td>
+    {% for new_posts in new_posts %}
+    
+    <a href="{% url 'thread_post_list' topic.id  %}"><b>{{new_posts.title}}</b></a> at <b>{{ new_posts.date_created|date:"h:i a"}}</b> On <b>{{new_posts.date_created|date:"jS b"}}</b>
+    {% empty %}
+        <h2>No New post at this time</h2>
+
+    {% endfor %}
+
+    </td></tr></tbody></table>
+
+
+{% endblock content %}

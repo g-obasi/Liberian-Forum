@@ -1,0 +1,128 @@
+{% extends 'forum/base.html' %}
+{% load forum_tags %}
+{% block content %}
+
+<a name="top"></a>
+<h2>My Posts</h2>
+
+<p>
+{% if page_obj %}
+        {% if page_obj.has_previous %}
+        <a href="?page={{page_obj.previous_page_number}}">Prev</a> 
+        {% endif %}
+
+        {% proper_elided_page_range paginator page_obj.number as page_range %}
+
+        {% for i in page_range %}
+            {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page.obj.number}}</b></li> 
+            {% elif i == paginator.ELLIPSIS %} <li class="active page_item"><span class="">{{paginator.ELLIPSIS}}</span></li> 
+            {% else %}
+                 <li class="page_item"><a class="page_link" href="?page={{i}}"> {{ i }}</a></li> 
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}">Next</a>
+        {% endif %}
+        (of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize:'s'}})
+{% endif %}
+</p>
+
+<table>
+    <tbody>
+{% for post in my_posts   %}
+<tr>
+    <td class="bold l pu"><a href="#top">{% if not forloop.first %}Re:{% endif %} {{topic.title}} </a> by <a
+            href="{% url 'profile_view' post.created_by %}" class="user"
+            title="Location: {{topic.created_by.location}}">{{post.created_by}}</a>(<span
+            class="m">{{post.created_by.get_gender_display}}</span>): <span
+            class="s"><b>{{ post.date_created|date:"h:i a"}}</b>
+            On
+            <b>{{post.date_created|date:"jS b"}}</b></span></td>
+</tr>
+            <!--POST BODY OR CONTENT-->
+           <!--POST BODY OR CONTENT-->
+
+        <tr>
+            <td class="l w pd">
+                <div id={{post.id}} class="narrow">
+                    <p> {{post.message}} </p>
+                </div>
+
+                <p class="s inline ml-5" > 
+                    {% if post.created_by == request.user %}
+                        (<a href="{% url 'update_post' post.id %}">Edit</a>)
+                    {% endif %}
+                    (<a href="{% url 'quote_post' post.id %}">Quote</a>)
+
+                    (<a href=" {% url 'report_post' post.id  %}">Report </a>) 
+                </p> 
+                    <p id='likebutton' style='display:inline-block' >
+
+                    {% with like_txt='Like' share_txt='share' likes_count=post.totalikescount shares_count=post.totalsharescount  user=request.user.id %}
+                    {% if likes_count == 0 %}
+                       <span class='s' id='likescount-{{post.id}}' style='font-weight:bold;'></span> 
+                       <span class='s' id='liketext-{{post.id}}' style='font-weight:bold;'></span> 
+
+                    {% else %}
+                        <span class='s' id='likescount-{{post.id}}' style='font-weight:bold;'>{{likes_count}}</span> 
+                        <span class='s' id='liketext-{{post.id}}' style='font-weight:bold;'>Like{{likes_count|pluralize}} </span> 
+                    {% endif %}
+
+                    {% if request.user in post.liked_by.all %}
+                        (<a id='postlike-{{post.id}}' onclick="likeUnlikePost(this, true, {{post.id}})" class='s' state="true" url="{% url 'post_like' post.id  %}">Unlike</a>)
+
+                    {% else %}
+                        (<a id='postlike-{{post.id}}' onclick="likeUnlikePost(this, false, {{post.id}})" class='s' state="false" url="{% url 'post_like' post.id  %}">Like</a>)
+                    {% endif %}
+                    </p>
+
+
+                    <p id='sharebutton' style='display:inline-block'>
+
+                    {% if shares_count == 0 %}
+                        <span class='s' id='sharescount-{{post.id}}' style='font-weight:bold;'></span> 
+                        <span class='s' id='sharetext-{{post.id}}'
+                        style='font-weight:bold;'></span>
+ 
+                    {% else %}                  
+                        <span class='s' id='sharescount-{{post.id}}' style='font-weight:bold;'>{{shares_count}}
+                        </span> <span class='s' id='sharetext-{{post.id}}'
+                            style='font-weight:bold;'>Share{{shares_count|pluralize}}
+                        </span>
+                    {% endif %}
+                    
+
+                    {% if request.user in post.shared_by.all %}
+                        (<a id='postshare-{{post.id}}' class='s'  onclick=" shareUnsharePost(this, true, {{post.id}})" state="true" url="{% url 'post_share' post.id  %}">Un-Share</a>)  
+
+                    {% else %}
+                        (<a id='postshare-{{post.id}}' class='s'  onclick=" shareUnsharePost(this, false, {{post.id}})" state="false" url="{% url 'post_share' post.id  %}">Share</a>)  
+                    {% endif %}
+
+                   {% if post.created_by == request.user %} (<a onclick="delete_post(this,{{post.id}})" id="deletepost-{{post.id}}" class='float-left s' url="{% url 'delete_post' post.id %}">Delete</a>){% endif %} </p>
+
+                   {% endwith %}
+
+
+               <!-- {{post.post_attachments.image.path}}  -->
+        {% if post.post_attachments.all %}
+            {% for image in post.post_attachments.all %}
+            <p> <img style="max-width:700px;" class="attachmentimage img" src="/media/{{image.image.name}}" /> </p>
+            {% endfor %}
+        {% endif %}
+
+            </td>
+        </tr>
+        <!-- END OF POST BODY OR CONTENT -->
+           
+            {% empty %}
+                <tr>
+                    <td>You have not posted yet as soon as you do they'll show up here</td>
+                </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+      
+
+{% endblock content %}

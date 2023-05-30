@@ -1,0 +1,82 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+{% load forum_tags %}
+
+
+{% block content %}
+ 
+<a name="top"></a><h2>Followed Boards</h2><a href="{% url 'home' %}">Liberian Forum</a> / <a href="#top">Followed Boards</a>
+
+<table><tbody>
+  <tr><td>
+{% for board in followed_boards %}
+<p style="font-weight:bold">Currently following</p>  <a href="{% url 'section' board.name %}">{{board.name}}</a> <a href="{% url 'follow_unfollow_board' board.pk %}"><img src="{% static 'img/icons/delete.png' %}"></a>
+
+  {% empty %}
+      <h3> You are not following any board this time, follow a board to get updates here
+  {% endfor %}
+</td></tr>
+
+  <tr><td class="w">
+  <form method="POST">
+  
+        {{form.select_board}}
+        
+        <input type="submit" value="Follow"></form>
+      </td></tr>
+      
+      </tbody></table>
+        
+        <!-- Vertipics -->
+        
+   <p>{% if page_obj %}
+        {% if page_obj.has_previous %}
+        <a href="?page={{page_obj.previous_page_number}}">Prev</a>
+        {% endif %}
+        {% for i in page_obj.paginator.page_range %}
+          {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page.obj.number}}</b></li>
+          
+          {% elif forloop.counter <= 10 %} <li style="display:inline" class="page_item"><a class="page_link"
+              href="?page={{forloop.counter}}"> ({{ forloop.counter }})</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{page_obj.next_page_number}}">Next</a>
+ 
+        {% endif %}(of <b>{{paginator.num_pages}}</b> page{{page_obj.paginator.num_pages|pluralize}})
+      {% endif %}</p>
+        
+        
+        <table><tbody>
+          <tr><th><b>Sort: Creation Time / <a href="">Update Time</a></b></th></tr>
+
+          {% for topic in board_topics %}
+            <tr><td id="{{topic.id}}" class="w"><a name=""></a> <img src="{% static 'img/icons/normal_post.gif' %}"> <b><a href="{% url 'section' topic.board.name %}">{{topic.board.name}}</a></b> / <b><a href="{{topic.get_absolute_url}}">{{topic.title}}</a> </b> <img src="{% static 'img/icons/new.gif' %}"> <br><span class="s">by <b><a href="{% url 'profile_view' topic.created_by %}">{{topic.created_by}}</a></b>. <b>{{topic.post_count}}</b> post{{topic.post_count|pluralize}} &amp; <b>{{topic.views}}</b> view{{topic.views|pluralize}}. <b>{{topic.date_created}}</b> </span></td></tr>
+          {% endfor %}
+          </td></tr></tbody></table>
+
+<p>
+  {% if page_obj %}
+    {% if page_obj.has_previous %}
+    <a href="?page={{page_obj.previous_page_number}}">Prev</a>
+    {% endif %}
+
+    {% proper_elided_page_range paginator page_obj.number as page_range %}
+
+    {% for i in page_range %}
+      {% if page_obj.number == i %} <li style="display:inline" class="active"><b>{{page.obj.number}}</b></li>
+      {% elif i == paginator.ELLIPSIS %} <li class="active page_item"><span class="">{{paginator.ELLIPSIS}}</span></li>
+      {% else %}
+      <li class="page_item"><a class="page_link" href="?page={{i}}"> {{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_previous %}
+    <a href="?page={{page_obj.next_page_number}}">Next</a>
+    {% endif %}
+  {% endif %}
+</p>
+
+
+{% endblock content %}

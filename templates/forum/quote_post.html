@@ -1,0 +1,97 @@
+{% extends 'forum/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<table summary="posting form"><tr><td class="l">    {% include 'posting_rules.html' %}
+
+
+<form method=POST  id="postform" name="postform" enctype="multipart/form-data">
+{% csrf_token %} 
+
+{{form.non_field_errors }}
+
+{% for hidden_field in form.hidden_fields %}
+    {{hidden_field.errors}}
+    {{hidden_field}}
+{% endfor %}
+
+{# {% include 'editor.html' %} #}
+
+<br />
+<b>Re:</b> Quoting <p style="color:maroon; display:inline-block; font-weight:bold">{{post.created_by}}</p> - <p style="border:1px solid #eee; margin:0 0 5px 0; padding:3px; background-color:#fff7ba; display:inline-block;"> {{post.message|truncatewords:7}}</p>
+
+<p><b>Message</b>:</p>
+
+<div id="editbar">
+    
+            <div id="editor" class="editor" >
+
+             <textarea id="content" class="content" name="message" rows="12" cols="50" placeholder="Write your reply here" maxlength="4096" minlength="10"  required></textarea>
+
+
+            <!-- <div id="content" style="border-radius:12px; border:1px solid #fff; background-color:#fff;width:500px; height:300px;" class="content" contenteditable="true">
+             <p style="border:1px solid #eee; width:80%;margin:auto;padding:6px; background-color:#fff7ba;"> {{post.message}}</p> -->
+            </div>
+            </div>
+
+        </div>
+
+ <!-- <p>{{form.memssage}}</p> -->
+<!--
+        <div id="editor" class="editor" data-simplebar data-simplebar-auto-hide="false">
+            <div id="content" class="content" contenteditable="true">
+                <p>Once upon a time...✏️</p>
+            </div> -->
+            <!-- <p style="border:1px solid #eee; background-color:#fff7ba;"> hello </p> -->
+         <!--script type="text/javascript">document.postform.body.focus()</script> --> 
+        <!-- <input type=submit value="Submit" accesskey=s><input type="checkbox" name="follow" checked="yes" value="on"> Follow this topic -->
+        
+        <br />
+        <div id = "attachments" class="clearfix">
+        <b>Attachments</b>: (maximum size: <b>5MB</b> for pictures )<br>
+        {{form.file}}
+        </div>
+        <input type="submit" style="margin-top:5px;" value="Quote">
+ </form>
+
+ </td>
+</tr>
+</table>
+
+{% comment %} 
+<a href="#top"></a>
+
+    {% for reply in replies %} <!--Replies for a particular post-->
+ <table>
+<tr >
+      <td class = "bold l pu" >
+      <!--RE: Ajimobi: Buhari Reacts To Death Of Ex - Oyo Governor by Ikennamurphy: 4: 10 am-->
+
+      <p> Re:  {{reply.post.title}} </a > by <a href="#top" class ="user" > {{reply.created_by|lower}} </a> <span class="s" > <b> {{ reply.date_created|date:"h:i a"}} </b> on <b> {{reply.date_created|date:"jS b"}} </b> </span> </p>
+
+      </td> </tr>
+
+      <tr>
+      <td class = "l w pd" id = "">
+      <div class = "message">
+    <p> {{reply.message}} </p> 
+    {% if reply.post_attachments.all %}
+        {% for image in reply.post_attachments.all %}
+    <p> <img style="max-width:700px;" class="attachmentimage img" src="/media/{{image.image.name}}" /> </p>
+        {% endfor %}
+    {% endif %}
+
+      <!-- <p style= 'display:inline;'> <a href = "" > (reply) </a ><span class= 's' id='likescount'  style='font-weight:bold;'>{{total_likes}} Like{{total_likes|pluralize:'s'}}</span> <a id ='comlike' href='{% url "comment_like" reply.id  %}'  >{{liked}} </a> </p>  -->
+            </div > 
+            <br/>
+
+      </td>
+
+       </tr>
+    {% endfor %} 
+{% endcomment %} 
+      </div>
+      </table>
+
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends 'forum/base.html'%} 
+{% load static %}
+
+{% load forum_tags %}
+
+
+ {% block content%}
+<table>
+  <tbody>
+    {% for post in posts %}
+
+    <tr>
+      <td>{{post.message}}-{{post.topic.title}}</td>
+    </tr>
+    {% empty %}
+    <h3>Follow someone and comeback here</h3>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock content %}

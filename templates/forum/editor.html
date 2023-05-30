@@ -1,0 +1,111 @@
+{% load static %}
+<!-- 
+             <div id="editbar" style="display:none">
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[b]", "[/b]")' title="Bold">
+             <span class="eb"><img src="{% static 'img/icons/bold.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[i]", "[/i]")' title="Italic">
+             <span class="eb"><img src="{% static 'img/icons/italicize.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[s]", "[/s]")' title="Strikethrough">
+             <span class="eb"><img src="{% static 'img/icons/strike.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[left]", "[/left]")' title="Align Left">
+             <span class="eb"><img src="{% static 'img/icons/left.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[right]", "[/right]")' title="Align Right">
+             <span class="eb"><img src="{% static 'img/icons/right.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[center]", "[/center]")' title="Align Center">
+             <span class="eb"><img src="{% static 'img/icons/center.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='addText("body1", "[hr]")' title="Horizontal Rule">
+             <span class="eb"><img src="{% static 'img/icons/hr.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[size=8pt]", "[/size]")' title="Font Size">
+             <span class="eb"><img src="{% static 'img/icons/size.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[font=Lucida Sans Unicode]", "[/font]")' title="Font Face">
+             <span class="eb"><img src="{% static 'img/icons/face.gif' %}"></span></a>
+
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[img]", "[/img]")' title="Insert Image/Picture">
+             <span class="eb"><img src="{% static 'img/icons/img.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[url]", "[/url]")' title="Insert Hyperlink">
+             <span class="eb"><img src="{% static 'img/icons/url.gif' %}"></span></a>
+
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[sub]", "[/sub]")' title="Subscript">
+             <span class="eb"><img src="{% static 'img/icons/sub.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[sup]", "[/sup]")' title="Superscript">
+             <span class="eb"><img src= "{% static 'img/icons/sup.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[code]", "[/code]")' title="Code">
+             <span class="eb"><img src="{% static 'img/icons/code.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='wrapText("body1", "[quote]", "[/quote]")' title="Quote">
+             <span class="eb"><img src="{% static 'img/icons/quote.gif' %}"></span></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :)")'><img src="{% static 'img/icons/smiley.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " ;)")'><img src="{% static 'img/icons/wink.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :D")'><img src="{% static 'img/icons/cheesy.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " ;D")'><img src="{% static 'img/icons/grin.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " >:(")'><img src="{% static 'img/icons/angry.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :(")'><img src="{% static 'img/icons/sad.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :o")'><img src="{% static 'img/icons/shocked.gif' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " 8)")'><img src="{% static 'img/icons/cool.png' %}"class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " ???")'><img src="{% static 'img/icons/huh.png' %}" style="width:15px;height:22px;"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :P")'><img src="{% static 'img/icons/tongue.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :-[")'><img src="{% static 'img/icons/embarrassed.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :-X")'><img src="{% static 'img/icons/lipsrsealed.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :-\\")'><img src="{% static 'img/icons/undecided.png' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :-*")'><img src="{% static 'img/icons/kiss.gif' %}" class="faces"></a>
+             <a href="javascript:void(0);" onclick='addText("body1", " :&#x27;(")'><img src="{% static 'img/icons/cry.gif' %}" class="faces"></a>
+             <select onchange="wrapText('body1', '[color='+this.options[this.selectedIndex].value+']', '[/color]'); this.selectedIndex = 0;" style="margin-bottom: 1ex;">
+                <option value="" selected="selected">Change Color</option>
+                <option value="#990000">Red</option>
+                <option value="#006600">Green</option>
+                <option value="#000099">Blue</option>
+                <option value="#770077">Purple</option>
+                <option value="#550000">Brown</option>
+                <option value="#000000">Black</option></select>
+            </div>
+            <script>document.getElementById("editbar").style.display = 'block';</script>
+            <span class=noisy>Please do not post adverts in this section, to avoid being banned.</span> 
+           WRITTY TEXT EDITOR -->
+
+<div id="editbar">
+
+
+    <div class="">
+
+        <!-- <div class="toolbar">
+            <div class="popup">
+                <button type="button" class="popup-button toolbar-button"><i class="fas fa-heading"></i></button>
+                <div class="popup-window">
+                    <button title="Heading format" class="popup-item Heading" data-edit="formatBlock:h1">Heading</button>
+                    <button title="Subheading format" class="popup-item Subheading" data-edit="formatBlock:h2">Subheading</button>
+                    <button title="Body format" class="popup-item Body" data-edit="formatBlock:p">Body</button>
+                    <button title="Caption format" class="popup-item Caption" data-edit="formatBlock:h5">Caption</button>
+                </div>
+
+            </div>
+
+
+            <button title="Bold" class="toolbar-button" data-edit="bold"><i class="fas fa-bold"></i></button>
+            <button title="Italic" class="toolbar-button" data-edit="italic"><i class="fas fa-italic"></i></button>
+            <button title="Underline" class="toolbar-button" data-edit="underline"><i class="fas fa-underline"></i></button>
+            <button title="Quote" class="toolbar-button" data-edit="formatBlock:blockquote"><i class="fas fa-quote-right"></i></button>
+
+
+            <button title="Unordered list" class="toolbar-button" data-edit="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
+            <button title="Ordered list" class="toolbar-button" data-edit="insertOrderedList"><i class="fas fa-list-ol"></i></button>
+
+            <button title="Insert link" class="toolbar-button" type="button" data-edt="insertLink"><i class="fas fa-link"></i></button>
+            <div class="popup">
+                <button title="Image" type="button" class="popup-button toolbar-button no-caret last"><i class="fas fa-image"></i></button>
+                <div class="popup-window">
+                    <label class="popup-button" for="imageUpload"><i class="fas fa-arrow-circle-up"></i>&nbsp; Upload Image</label>
+                    <input type="file" name="imageUpload" hidden id="imageUpload" accept=".gif,.jpg,.jpeg,.png">
+                </div>
+            </div>
+            
+        </div> -->
+
+        <div id="editor" class="editor" data-simplebar data-simplebar-auto-hide="false">
+            <textarea id="content" class="content" name="message" rows="12" cols="50" maxlength="4096" minlength="1"  placeholder="4000 words or less" required><p>Once upon a time...✏️</p></textarea>
+            <!-- <span id="counter">0</span> -->
+            <!-- <div id="content" class="content" contenteditable="true">
+                <p>Once upon a time...✏️</p>
+            </div> -->
+        </div>
+
+    </div> 
+    </div>
