@@ -23,17 +23,17 @@ from django.http import HttpResponse
 
 
 def post_img_directory(instance, filename):
-    return 'images/post_images/{0}/{1}'.format(instance.created_by, filename)
+    return 'images/post_images/{0}/{1}'.format(instance.post.created_by, filename)
 
 
 def comment_img_directory(instance, filename):
-    return 'images/comment_images/{0}/{1}'.format(instance.created_by, filename)
+    return 'images/comment_images/{0}/{1}'.format(instance.post.created_by, filename)
 
 
 def validate_file_size(file):
     file_size = file.size
     
-    if file_size >5242880: #5mb exact
+    if file_size > 5242880: #5mb exact
         raise ValidationError('File too large - 5MB Max')
 
 
@@ -46,7 +46,7 @@ def validate_image(value):
 
 class Board(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    parent=models.CharField(max_length=50, blank=True, null=True)
+    parent = models.CharField(max_length=50, blank=True, null=True)
     description = models.CharField(max_length=255, unique=True)
     icon = models.ImageField(upload_to='images/board_icons', null=True, blank=True)
     followers = models.ManyToManyField(User, blank=True, verbose_name='Board_Followers', related_name='board_followers')
@@ -81,7 +81,7 @@ class Board(models.Model):
 
 class Topic(models.Model):
 
-    slug = models.SlugField(max_length=120, unique=True)
+    slug = models.SlugField(max_length=80, unique=True)
     board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='topics')
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, unique=True)
@@ -102,10 +102,10 @@ class Topic(models.Model):
         # indexes = (GinIndex(fields=["vector_column"]),)  # add index
 
     def get_absolute_url(self):
-        return reverse('thread_post_list', kwargs={'topic_pk': self.topic.pk})
+        return reverse('thread_post_list', kwargs={'slug':self.slug ,'topic_pk': self.pk})
     
     def get_last_ten_posts(self):
-        return self.posts.order_by('-date_created')[:10]
+        return self.topic_posts.order_by('-date_created')[:10]
 
     def num_posts(self):
         return self.post_count
@@ -138,7 +138,11 @@ class Post(models.Model):
         return self.topic.title + '/n' + self.message
 
     def get_absolute_url(self):
-        return reverse('thread_post_list', kwargs={'topic_pk': self.topic.pk})
+        return reverse('thread_post_list', kwargs={'slug':self.topic.slug, 'topic_pk': self.topic.pk})
+    
+    def get_page_count(self):
+        return self.topic.post_count/3
+
 
     def totalikescount(self):
         return self.liked_by.count()

@@ -10,7 +10,7 @@ class TopicForm(ModelForm):
     message = forms.CharField(max_length=4096, widget=forms.Textarea(
     attrs={'rows': 12, 'id': 'body1', 'placeholder': '4000 words or less'}))
     image = forms.ImageField(widget=forms.FileInput(attrs={'multiple': True}))
-    file = forms.ImageField(widget=forms.FileInput(attrs={'multiple': True}))
+    # file = forms.ImageField(widget=forms.FileInput(attrs={'multiple': True}))
 
     class Meta:
         model = Topic
@@ -31,11 +31,11 @@ class BoardChoiceForm(Form):
 class PostForm(ModelForm):
     message = forms.CharField(max_length=4096, widget=forms.Textarea(
     attrs={'rows': 12, 'id': 'body1', 'placeholder': '4000 words or less'}))
-    file = forms.FileField(widget=forms.FileInput(attrs={'multiple': True}))
+    file = forms.FileField(required=False, widget=forms.FileInput(attrs={'multiple': True}))
 
     class Meta:
         model = Post
-        fields = ['message', ]
+        fields = ['message', 'file']
 
 
 class FileForm(ModelForm):
@@ -54,7 +54,7 @@ class PostUpdateForm(ModelForm):
 
     class Meta:
         model = Post
-        fields = ['message', ]
+        fields = ['message', 'file' ]
 
 
 class SearchForm(Form):
@@ -74,7 +74,7 @@ class SearchForm(Form):
 class QuoteForm(ModelForm):
     message = forms.CharField(max_length=2048, widget=forms.Textarea(
         attrs={'rows': 12, 'id': 'body1', 'placeholder': '2000 words or less'}))
-    file = forms.FileField(widget=forms.FileInput(attrs={'multiple': True}))
+    file = forms.FileField(required=False, widget=forms.FileInput(attrs={'multiple': True}))
 
     class Meta:
         model = Post
