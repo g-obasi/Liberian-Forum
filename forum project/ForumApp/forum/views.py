@@ -36,7 +36,7 @@ class FeaturedTopic(ListView):
     template_name = 'forum/home.html'
     paginate_by = 60
     context_object_name = 'featured_topics'
-    queryset = Topic.objects.filter(featured=True).order_by('-date_created')
+    queryset = Topic.objects.filter().order_by('-date_created')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -53,21 +53,30 @@ class SectionTopic(ListView):
     def get_queryset(self):
         board = get_object_or_404(Board, name=self.kwargs['board_name'])
         queryset = Topic.objects.filter(board=board)
+        user = self.request.user
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         board = get_object_or_404(Board, name=self.kwargs['board_name'])
-        # print(board.id)
+       
         context['child_boards'] = Board.objects.filter(parent=board)
         context['board'] = board
 
         # FOR TOPIC FOLLOW
         if self.request.user.is_authenticated:
-            if board.followers.filter(board_followers=self.request.user).exists():
+            # print(board.followers)
+            # print(board.id)
+            # print(board.name)
+            # print(self.request.user)
+            
+            if board.followers.filter(board_followers=self.request.user.id).exists():
                 context['follow_text'] = 'Unfollow'
+                context['followed'] = "true"
             else:
                 context['follow_text'] = 'Follow'
+                context['followed'] = "false"
+
         return context
 
 
@@ -96,6 +105,15 @@ class TopicCreateView(LoginRequiredMixin, CreateView):
     form_class = TopicForm
     # files = request.FILES.getlist('images')
 
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        board_pk = self.kwargs['board_pk']
+        board = get_object_or_404(Board, pk=board_pk)
+        context['board'] = board
+        # print(board.name)
+        return context
+
 # create a kwarg to accept board_pk
     def form_valid(self, form):
         subject = form.cleaned_data['title']  # Topic
@@ -111,25 +129,26 @@ class TopicCreateView(LoginRequiredMixin, CreateView):
             title=subject,
             slug=slugify(subject),
             board=board,
-            views=F('views') + 1,
-            post_count=F('post_count') + 1,
+            views=1,
+            post_count=1,
             )
+        topic.save()
         topic.followers.add(user)
 
-        post = Post.objects.create(
+        post = Post(
                 message=message,
                 topic=topic,
                 created_by=user,
                 )
+        
         post.save()
-        topic.save()
 
         for file in files:
-            Attachment.objects.create(
+           attachment = Attachment.objects.create(
                 post=post, image=file
             )
-
-        return redirect('/')
+        attachment.save()
+        return redirect(topic.get_absolute_url())
 
 
 class TopicDeleteView(LoginRequiredMixin, DeleteView):
@@ -150,7 +169,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         message = form.cleaned_data['message']
         topic = self.request.get['topic_pk']
 
-        post = Post.objects.create(
+        post = Post(
                 message=message,
                 topic=topic,
                 created_by=self.request.user,
@@ -172,24 +191,25 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return redirect(post_url)
 
 
-def ReportInnapropiatePost(request,  post_id, report_reason):
+def ReportInnapropiatePost(request,  post_id):
     post = get_object_or_404(Post, pk=post_id)
     user = get_object_or_404(User, pk=request.user.id)
-    message = " Please check this post with the POST ID - <b>{post_id}</b> <br>POST REPORTER ID - {reporter_id} <br>CONTENT = <b>{post_content}</b> if it is Appropriate or Not".format(
+    message = """ Please check this post with the POST ID - <b>{post_id}</b> <br>POST REPORTER ID - {reporter_id} <br>CONTENT = 
+    <b>{post_content}</b> <br />if it is Appropriate or Not""".format(
                 post_id=post.id,
                 reporter_id=user.id,
                 post_content=post.message
     )
     
     # send_mail(" REPORT POST", message="", from_email="", )
-    mail_admins("REPORT POST",  html_message=message)
+    mail_admins("REPORT POST",  message="Check this post it was reported", html_message=message)
+    return redirect(request.META['HTTP_REFERER'])
 
+# @login_required()
+# def likes_and_shares(request):
+#     pass
 
-
-def likes_and_shares(request):
-    pass
-
-
+@login_required()
 def trending(request): pass
 
 
@@ -201,9 +221,8 @@ def mentions(request): pass
 @login_required()
 def following_people_post(request):
     user = request.user.id
-    posts = Post.objects.filter(created_by__followings__followes=user)
+    posts = Post.objects.filter(created_by__followings=user)
     return render(request, 'forum/following_people_feed.html', {'posts': posts})
-
 
 
 # def recent_posts(request):
@@ -215,7 +234,7 @@ def following_people_post(request):
 class RecentPostList(ListView):
     # model = Post
     template_name = 'forum/recent.html'
-    context_object_name = 'recent_post'
+    context_object_name = 'recent_posts'
     paginate_by = 80
 
     def get_queryset(self):
@@ -223,38 +242,37 @@ class RecentPostList(ListView):
         queryset = Post.objects.filter(date_created__gte=time_48hours)
         return queryset
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        topic = get_object_or_404(Topic, pk=self.kwargs['topic_pk'])
-        context['topic'] = topic
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     topic = get_object_or_404(Topic, pk=self.kwargs['topic_pk'])
+    #     context['topic'] = topic
 
-        # FOR TOPIC FOLLOW
-        if topic.followers.filter(id=self.request.user.id).exists():
-            context['follow_text'] = 'Unfollow'
-        else:
-            context['follow_text'] = 'Follow'
+    #     # FOR TOPIC FOLLOW
+    #     if topic.followers.filter(id=self.request.user.id).exists():
+    #         context['follow_text'] = 'Unfollow'
+    #     else:
+    #         context['follow_text'] = 'Follow'
 
         
-        for post in self.get_queryset():
-            if post.totalikescount() >= 1:
-                context['likes_count'], context['like_txt'] = post.totalikescount(), 'Like'
+    #     for post in self.get_queryset():
+    #         if post.totalikescount() >= 1:
+    #             context['like_count'], context['like_txt'] = post.totalikescount(), 'Like'
 
-            if post.totalsharescount() >= 1:
-                context['shares_count'], context['share_txt'] = post.totalsharescount(), 'Share'
+    #         if post.totalsharescount() >= 1:
+    #             context['shares_count'], context['share_txt'] = post.totalsharescount(), 'Share'
 
-        # FOR POST LIKE
-            if post.liked_by.filter(id=self.request.user.id).exists():
-                context['like_state'] = 'Unlike'
-            else:
-                context['like_state'] = 'Like'
+    #     # FOR POST LIKE
+    #         if post.liked_by.filter(id=self.request.user.id).exists():
+    #             context['like_state'] = 'Unlike'
+    #         else:
+    #             context['like_state'] = 'Like'
 
-        # FOR POST SHARE
-            if post.shared_by.filter(id=self.request.user.id).exists():
-                context['share_state'] = 'Un-Share'
-            else:
-                context['share_state'] = 'Share'
-        return context
-
+    #     # FOR POST SHARE
+    #         if post.shared_by.filter(id=self.request.user.id).exists():
+    #             context['share_state'] = 'Un-Share'
+    #         else:
+    #             context['share_state'] = 'Share'
+        # return context
 
 
 def new_posts(request):
@@ -263,11 +281,20 @@ def new_posts(request):
     return render(request, 'forum/new.html', {'new_posts': new_5})
 
 
+
 @login_required()
-def followed_topics(request, username):
-    user = get_object_or_404(User, username=username)
-    followed_topics = user.thread_followers.all()
-    return render(request, 'forum/followed_threads.html', {'followed_topics': followed_topics})
+def follow_unfollow_topic(request, topic_id):
+    user = request.user
+    user_id = request.user.id
+    topic = get_object_or_404(Topic, pk=topic_id)
+    if topic.followers.filter(id=user_id).exists():
+        topic.followers.remove(user)
+        followed_topic = 'false'
+    else:
+        topic.followers.add(user)
+        followed_topic = 'true'
+    return JsonResponse({'followed_topic': followed_topic})
+
 
 
 # follow - unfollow boards
@@ -282,23 +309,29 @@ def followed_topics(request, username):
 
 #     def get_context_data(self, **kwargs):
 #         context = super().get_context_data(**kwargs)
-    
+
 
 @login_required()
-def followed_boards(request, username, keyword=None):
-    user = User.get_object_or_404(username)
+def followed_topics(request):
+    user = get_object_or_404(User, pk=request.user.id)
+    followed_topics = user.thread_followers.all()
+    return render(request, 'forum/followed_threads.html', {'followed_topics': followed_topics})
+
+
+@login_required()
+def followed_boards(request):
+    user = get_object_or_404(User, pk=request.user.id)
     
     if request.method == 'POST':
         form = BoardChoiceForm(request.Post)
 
-    if form.is_valid:
-        board = form.cleaned_data.get('board_select')
-        board = get_object_or_404(Board, name=board)
+        if form.is_valid:
+            board = form.cleaned_data.get('board_select')
+            board = get_object_or_404(Board, name=board)
 
-    if user.board.filter(pk=board).exists():
-        pass
-    else:
-        user.board.add(board)
+            if not board.followers.filter(pk=request.user.id).exists():
+                board.followers.add(board)
+       
     followed_boards = Board.objects.filter(followers=user)
     board_topics = Topic.objects.filter(board__in=followed_boards).all()
 
@@ -306,41 +339,54 @@ def followed_boards(request, username, keyword=None):
 
 
 @login_required()
-def quote_post(request, post_id, topic_id):
+def quote_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    replies_desc = post.replies.all().reverse()
-    topic = topic_id
+    topic = get_object_or_404(Topic, pk=post.topic.id)
+    post_count = int(round((topic.topic_posts.count()/3), 10))
+    
+    
+    # replies_desc = topic.topic_posts.all().reverse()
 
-    init_data = {
-        'comment_text': post.message
-    }
+    # init_data = {
+    #     'message': post.message
+    # }
+    
     if request.method == 'POST':
         form = QuoteForm(request.POST, request.FILES)
-        message = form.cleaned_data['message']
-        files = request.FILES.getlist('files')
+        files = request.FILES.getlist('file')
+        print(files)
+
 
         if form.is_valid():
+            message = form.cleaned_data['message']
 
             post = Post.objects.create(
+                created_by=request.user,
                 message=message,
-                last_updated=datetime.now()
+                topic=topic,
                 )
             post.save()
             
             for file in files:
-                Attachment.objects.create(post=post, image=file)
- 
+                attachment=Attachment.objects.create(post=post, image=file)
+            attachment.save()
+            
+            topic.last_updated = datetime.now()
+            topic.post_count = F('post_count') + 1
+            topic.save()
+            # form.save()
+          
         post_url = '{url}?page={page}#{id}'.format(
                 url=post.get_absolute_url(),
                 id=post.pk,
-                page=topic.post.get_page_count()
+                page=post_count
             )  # reverse('post_detail', topic.pk, post_html_id)
 
         return redirect(post_url)
     else:
-        form = QuoteForm(initial=init_data)
+        form = QuoteForm()
 
-    return render(request, 'forum/quote_post.html', {'form': form, 'replies': replies_desc})
+    return render(request, 'forum/quote_post.html', {'post': post, 'form': form})
 
 #  SH / FT / FB / L&S / MT / FG / FS 
 
@@ -350,30 +396,39 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     template_name_suffix = None
     form_class = PostUpdateForm
 
-
     def get_initial(self):
-        dict ={''}
-        return dict
+        initial = super(PostUpdateView, self).get_initial()
+        initial['message'] = self.object.message
+        attachment = Attachment.objects.filter(post=self.object)
+        initial['file'] = attachment
+        return initial
 
     def form_valid(self, form):
-        files = self.request.FILES.getlist('files')
+        post_count = int(self.object.topic.topic_posts.count()/3)
+        files = self.request.FILES.getlist('file')
         message = form.cleaned_data['message']
+        topic=self.object.topic
+        post=self.object
 
-        post = Post.objects.create(
-                message=message,
-                last_updated=datetime.now()
-                )
-
-        post.save()
+        
+        # post = Post.objects.create(
+        #         created_by=request.user,
+        #         message=message,
+        #         topic=topic)
+        # post.save()
+            
+        topic.last_updated = datetime.now()
+        topic.save()
 
         for file in files:
             Attachment.objects.create(post=post,
                                     image=file)
 
+        form.save()
         post_url = '{url}?page={page}#{id}'.format(
                 url=post.get_absolute_url(),
                 id=post.pk,
-                page=self.topic.get_page_count()
+                page=post_count
             )
         return redirect(post_url)
 
@@ -385,15 +440,24 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
     # success_url = reverse('topic/section_posts/')
 
 
+@login_required()
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    post.delete()
+    delete_result = 'true'
+
+    return JsonResponse({'deleted_post': delete_result})
+
 class PostListView(ListView):
     # model = Post
-    template_name = 'forum/posts_and_replies.html'
+    allow_empty = True
+    template_name = 'forum/post&replies.html'
     context_object_name = 'post'
     paginate_by = 3
 
     def get_queryset(self):
         topic = get_object_or_404(Topic, pk=self.kwargs['topic_pk'])
-        queryset = Post.objects.filter(topic=topic).order_by('-date_created')
+        queryset = Post.objects.filter(topic=topic).order_by('date_created')
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -404,46 +468,57 @@ class PostListView(ListView):
         # FOR TOPIC FOLLOW
         if topic.followers.filter(id=self.request.user.id).exists():
             context['follow_text'] = 'Unfollow'
+            context['followed'] = 'true'
+            
         else:
             context['follow_text'] = 'Follow'
-
+            context['followed'] = 'false'
+            
         #List of similar posts
-        topic_tags_ids = topic.tags.values_list('id', flat=True)
-        similar_posts = Topic.objects.filter(tags__in=topic_tags_ids).exclude(id=topic.id)
-        context['similar_topics'] = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-date_created')[:6]
+        # topic_tags_ids = topic.tags.values_list('id', flat=True)
+        # similar_posts = Topic.objects.filter(tags__in=topic_tags_ids).exclude(id=topic.id)
+        # context['similar_topics'] = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-date_created')[:6]
 
-        for post in self.get_queryset():
-            if post.totalikescount() == 0:
-                # like_txt, likes_count = ' '
-                context['like_txt'], context['likes_count'] = '', ''
-            else:
-                # like_txt, likes_count = 'Like', post.totallikescount()
-                context['likes_count'], context['like_txt'] = post.totalikescount(), 'Like'
+        # for post in self.get_queryset():
+        #     if post.totalikescount() == 0:
+        #         # like_txt, like_count = ' '
+        #         context['likes_txt'], context['like_count'] = '',''
+        #     else:
+        #         # like_txt, like_count = 'Like', post.totallikescount()
+        #         context['like_count'], context['like_txt'] = post.totalikescount(), 'Like'
+        #         print(post.id,'-',post.totalikescount())
 
-            if post.totalsharescount() == 0:
-                context['share_txt'], context['shares_count'] = '', ''
-            else:
-                context['shares_count'], context['share_txt'] = post.totalsharescount(), 'Share'
+        #     if post.totalsharescount() == 0:
+        #         context['share_txt'], context['shares_count'] = '',''
+        #     else:
+        #         context['shares_count'], context['share_txt'] = post.totalsharescount(), 'Share'
 
-        # FOR POST LIKE
-            if post.liked_by.filter(id=self.request.user.id).exists():
-                context['like_state'] = 'Unlike'
-            else:
-                context['like_state'] = 'Like'
-
-        # FOR POST SHARE
-            if post.shared_by.filter(id=self.request.user.id).exists():
-                context['share_state'] = 'Un-Share'
-            else:
-                context['share_state'] = 'Share'
+        # # FOR POST LIKE
+        #     if post.liked_by.filter(id=self.request.user.id).exists():
+        #         context['like_state'] = 'Unlike'
+        #         context['liked'] = 'true'
+                
+        #     else:
+        #         context['like_state'] = 'Like'
+        #         context['liked'] = 'false'
+                
+        # # FOR POST SHARE
+        #     if post.shared_by.filter(id=self.request.user.id).exists():
+        #         context['share_state'] = 'Un-Share'
+        #         context['shared'] = 'true'
+                
+        #     else:
+        #         context['share_state'] = 'Share'
+        #         context['shared'] = 'false'
+                
         return context
 
 
 @login_required()
 def like_dislike_post(request, id):
     userid = request.user.id
-    user = request.user
-
+    user = get_object_or_404(User, pk=userid)
+    
     post = get_object_or_404(Post, pk=id)
     if post.liked_by.filter(id=userid).exists():
         post.liked_by.remove(user)
@@ -472,10 +547,10 @@ def share_unshare_post(request, id):
 
 
 @login_required()
-def follow_unfollow_board(request, board_id):
+def follow_unfollow_board(request, board_pk):
     userid = request.user.id
     user = request.user
-    board = get_object_or_404(Board, pk=board_id)
+    board = get_object_or_404(Board, pk=board_pk)
     if board.followers.filter(id=userid).exists():
         board.followers.remove(user)
         followed_board = 'false'
@@ -495,18 +570,6 @@ def delete_file(request, file_id):
     return JsonResponse({'deleted': delete_result})
 
 
-@login_required()
-def follow_unfollow_topic(request, topic_id):
-    # user_id = request.user.id
-    user = request.user
-    topic = get_object_or_404(Topic, pk=topic_id)
-    if topic.followers.filter(user=user).exists():
-        topic.followers.remove(user)
-        followed_topic = 'true'
-    else:
-        topic.followers.add(user)
-        followed_topic = 'false'
-    return JsonResponse({'followed_topic': followed_topic})
 
 
 def feed(request):
@@ -529,7 +592,7 @@ def search(request, q):
         results = list(chain(topic_results, post_results))
         # results = topic_results.union(post_results, all=True)
         for result in results:
-            print(results)
+            print(result)
 
     # result = Post.objects.filter(
     #     Q(topic__title__icontains=query) | Q(message__icontains=query)
@@ -544,33 +607,36 @@ def reply_post(request, pk):
 
 @login_required()
 def reply_topic(request, topic_pk):
-    topic = get_object_or_404(Topic, topic_pk=topic_pk)
-    replies_desc = topic.post_replies.all().reverse()
-
+    topic = get_object_or_404(Topic, pk=topic_pk)
+    replies_desc = topic.topic_posts.all().reverse()[:10]
+    post_count = int(topic.topic_posts.count()/3) or ''
+    
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
-        message = form.cleaned_data['message']
-        files = request.FILES.getlist('files')
+        files = request.FILES.getlist('file')
 
         if form.is_valid():
+            message = form.cleaned_data['message']
+
             post = Post.objects.create(
                 created_by=request.user,
                 message=message,
-                last_updated=datetime.now(),
                 topic=topic)
             post.save()
             
             topic.last_updated = datetime.now()
-            topic.post_count = F('post_count')+1
+            topic.post_count = F('post_count') + 1
+            topic.views = F('views') + 1
             topic.save()
             
             for file in files:
                 Attachment.objects.create(post=post, image=file)
- 
+            # attachment.save()
+            
         post_url = '{url}?page={page}#{id}'.format(
                 url=post.get_absolute_url(),
                 id=post.pk,
-                page=request.Get.get('page')
+                page=post_count
             )  
 
         return redirect(post_url)
