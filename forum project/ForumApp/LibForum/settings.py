@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ynw&iu&7&@q2cfus52*1&*um20k249x^=4gka-%8+@$ts6nqo6'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,7 +31,7 @@ INTERNAL_IPS = [
     '0.0.0.0',
     'localhost',
     'testserver',
-    'liberian-forum.com',
+    'libforum.net',
 ]
 
 ALLOWED_HOSTS = [
@@ -115,8 +115,8 @@ ACCOUNT_ACTIVATION_DAYS = 1
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'Greenfieldchinedu6@gmail.com'
-EMAIL_HOST_PASSWORD = '27dd19ac.'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = '.'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'LibForum Team <noreply@Libforum.com>'
 
@@ -129,7 +129,7 @@ DATABASES = {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': "LIBERIAN FORUM",
             'USER': 'postgres',
-            'PASSWORD': '27dd19ac.',
+            'PASSWORD': 'new_password',
             'HOST': '',
             'PORT': '5432'
         }
@@ -184,4 +184,4 @@ MEDIA_URL = '/media/'
 # file upload temp folder if file exceeds max_upload_size
 FILE_UPLOAD_TEMP_DIR = 'temp/'
 
-ADMINS = (('Greenfield', 'greenfieldchinedu6@gmail.com'), ('Greenfield2', 'greenfieldobasi@gmail.com'), ('Ephraim', 'ephraimmomoh94@gmail.com'))
+ADMINS =""
